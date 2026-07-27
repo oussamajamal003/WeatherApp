@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   preview:
     runs-on: ubuntu-latest
