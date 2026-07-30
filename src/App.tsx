@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeProvider';
 import { useTheme } from './hooks/useTheme';
+import { AppShell } from './components/layout/AppShell';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -9,9 +10,9 @@ const queryClient = new QueryClient();
 function Home() {
   const { theme, setTheme } = useTheme();
   return (
-    <div className="p-8 text-center min-h-screen flex flex-col items-center justify-center bg-background">
+    <div className="flex flex-col items-center justify-center min-h-[50vh]">
       <h1 className="text-displayL font-display text-primary">WeatherApp</h1>
-      <p className="mt-4 text-text-secondary font-sans">The application is successfully initialized.</p>
+      <p className="mt-4 text-text-secondary font-sans">The application layout is successfully initialized.</p>
       
       <div className="mt-8 flex gap-4">
         <button 
@@ -46,9 +47,14 @@ function App() {
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
+          <AppShell>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<div className="p-4">Search Page Placeholder</div>} />
+              <Route path="/settings" element={<div className="p-4">Settings Page Placeholder</div>} />
+              <Route path="/about" element={<div className="p-4">About Page Placeholder</div>} />
+            </Routes>
+          </AppShell>
         </BrowserRouter>
       </QueryClientProvider>
     </ThemeProvider>
