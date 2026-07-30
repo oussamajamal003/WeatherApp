@@ -1,0 +1,98 @@
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../../utils/cn';
+
+const cardVariants = cva(
+  'min-w-[240px] text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary aria-disabled:opacity-50 aria-disabled:pointer-events-none',
+  {
+    variants: {
+      variant: {
+        default: 'bg-surface shadow-sm border border-transparent',
+        elevated: 'bg-surface shadow-md border border-border/50',
+        glass: 'bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-sm',
+        outlined: 'bg-transparent border border-border',
+      },
+      padding: {
+        compact: 'p-4', // 16px
+        standard: 'p-6', // 24px
+        spacious: 'p-8', // 32px
+      },
+      radius: {
+        compact: 'rounded-xl', // 12px
+        standard: 'rounded-2xl', // 16px
+        hero: 'rounded-[24px]',
+      },
+      interactive: {
+        true: 'cursor-pointer hover:border-primary/50 aria-selected:border-primary aria-selected:ring-1 aria-selected:ring-primary',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      padding: 'standard',
+      radius: 'standard',
+      interactive: false,
+    },
+  }
+);
+
+export interface CardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {
+  isDisabled?: boolean;
+  isSelected?: boolean;
+}
+
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, variant, padding, radius, interactive, isDisabled, isSelected, ...props }, ref) => {
+    // If it's interactive, we should ideally render a button or add role="button"
+    const isClickable = interactive || props.onClick;
+    return (
+      <div
+        ref={ref}
+        role={isClickable ? 'button' : undefined}
+        tabIndex={isClickable && !isDisabled ? 0 : undefined}
+        aria-disabled={isDisabled}
+        aria-selected={isSelected}
+        className={cn(cardVariants({ variant, padding, radius, interactive: !!isClickable, className }))}
+        {...props}
+      />
+    );
+  }
+);
+Card.displayName = 'Card';
+
+export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn('flex flex-col space-y-1.5 mb-4', className)} {...props} />
+  )
+);
+CardHeader.displayName = 'CardHeader';
+
+export const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ className, ...props }, ref) => (
+    <h3 ref={ref} className={cn('font-semibold leading-none tracking-tight text-lg', className)} {...props} />
+  )
+);
+CardTitle.displayName = 'CardTitle';
+
+export const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ className, ...props }, ref) => (
+    <p ref={ref} className={cn('text-sm text-subtle', className)} {...props} />
+  )
+);
+CardDescription.displayName = 'CardDescription';
+
+export const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn('', className)} {...props} />
+  )
+);
+CardContent.displayName = 'CardContent';
+
+export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={cn('flex items-center pt-4 mt-auto', className)} {...props} />
+  )
+);
+CardFooter.displayName = 'CardFooter';
