@@ -216,6 +216,13 @@
   --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
   --shadow-glowPrimary: 0 0 24px rgba(45, 111, 232, 0.35);
   --shadow-glowAccent: 0 0 24px rgba(255, 140, 66, 0.35);
+
+  /* Elevation (Blur) */
+  --blur-low: 8px;
+  --blur-medium: 20px;
+  --blur-high: 32px;
+  --blur-floating: 48px;
+  --blur-modal: 64px;
 }
 
 @layer base {
@@ -338,4 +345,88 @@
   body {
     @apply bg-background text-text font-sans antialiased;
   }
+}
+
+@utility text-displayXL {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 400;
+  line-height: 1.0;
+}
+
+@utility text-displayL {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.0;
+}
+
+@utility text-h1 {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+@utility text-h2 {
+  font-family: var(--font-sans);
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+@utility text-h3 {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@utility text-h4 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@utility text-bodyLarge {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+@utility text-body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+@utility text-small {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@utility text-caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@utility text-button {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.0;
+}
+
+@utility text-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.0;
 }

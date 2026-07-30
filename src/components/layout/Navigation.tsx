@@ -13,13 +13,13 @@ export function Navigation() {
     <>
       {/* Tablet (Nav Rail) & Desktop (Full Sidebar) */}
       <nav className="hidden md:flex flex-col sticky top-0 h-screen border-r border-border-subtle bg-surface z-40 shrink-0 md:w-[72px] lg:w-[240px] transition-all duration-300">
-        <div className="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3 lg:px-4">
+        <div className="flex-1 overflow-y-auto py-12 flex flex-col gap-4 px-6 lg:px-8">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-4 rounded-xl p-3 transition-colors ${
+                `flex items-center gap-8 rounded-xl p-6 transition-colors ${
                   isActive 
                     ? 'bg-primary-subtle text-primary hover:bg-primary-subtle/80' 
                     : 'text-text-secondary hover:bg-card-subtle hover:text-text'
@@ -35,13 +35,13 @@ export function Navigation() {
       </nav>
 
       {/* Mobile (Bottom Tab Bar) */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full h-[80px] box-content pb-[env(safe-area-inset-bottom,34px)] bg-surface/80 backdrop-blur-xl border-t border-border-subtle z-50 flex items-center justify-around px-2">
+      <nav className="md:hidden fixed bottom-0 left-0 w-full h-[80px] box-content pb-[env(safe-area-inset-bottom,34px)] bg-surface/80 backdrop-blur-xl border-t border-border-subtle z-50 flex items-center justify-around px-4">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center gap-1 min-w-[64px] h-full transition-colors ${
+              `flex flex-col items-center justify-center gap-2 min-w-[64px] h-full transition-colors ${
                 isActive ? 'text-primary' : 'text-text-secondary hover:text-text'
               }`
             }

@@ -10,9 +10,9 @@ const spinnerVariants = cva('animate-spin', {
       muted: 'text-subtle',
     },
     size: {
-      sm: 'h-4 w-4', // 16px
-      md: 'h-6 w-6', // 24px
-      lg: 'h-9 w-9', // 36px
+      sm: 'h-8 w-8', // 16px
+      md: 'h-12 w-12', // 24px
+      lg: 'h-[36px] w-[36px]', // 36px
     },
   },
   defaultVariants: {

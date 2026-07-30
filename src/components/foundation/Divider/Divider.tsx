@@ -16,7 +16,7 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
           role="separator"
           aria-orientation="vertical"
           className={cn(
-            'inline-block w-[1px] min-h-[20px] self-stretch bg-border mx-2',
+            'inline-block w-[1px] min-h-[20px] self-stretch bg-border mx-4',
             variant === 'dashed' && 'border-l border-dashed border-border bg-transparent',
             className
           )}
@@ -31,11 +31,11 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
           ref={ref}
           role="separator"
           aria-orientation="horizontal"
-          className={cn('flex items-center w-full my-4', className)}
+          className={cn('flex items-center w-full my-8', className)}
           {...props}
         >
           <div className={cn('flex-grow h-[1px]', variant === 'dashed' ? 'border-t border-dashed border-border' : 'bg-border')} />
-          <span className="px-3 text-[11px] font-mono text-subtle tracking-[0.06em] uppercase">
+          <span className="px-6 text-caption text-subtle tracking-[0.06em] uppercase">
             {label}
           </span>
           <div className={cn('flex-grow h-[1px]', variant === 'dashed' ? 'border-t border-dashed border-border' : 'bg-border')} />
@@ -49,7 +49,7 @@ export const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
         role="separator"
         aria-orientation="horizontal"
         className={cn(
-          'w-full h-[1px] my-4',
+          'w-full h-[1px] my-8',
           variant === 'dashed' ? 'border-t border-dashed border-border' : 'bg-border',
           className
         )}

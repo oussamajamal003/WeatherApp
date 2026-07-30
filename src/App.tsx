@@ -12,30 +12,30 @@ function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh]">
       <h1 className="text-displayL font-display text-primary">WeatherApp</h1>
-      <p className="mt-4 text-text-secondary font-sans">The application layout is successfully initialized.</p>
+      <p className="mt-8 text-text-secondary font-sans">The application layout is successfully initialized.</p>
       
-      <div className="mt-8 flex gap-4">
+      <div className="mt-16 flex gap-8">
         <button 
           onClick={() => setTheme('light')}
-          className={`px-4 py-2 rounded-md font-sans text-button ${theme === 'light' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
+          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'light' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
         >
           Light
         </button>
         <button 
           onClick={() => setTheme('dark')}
-          className={`px-4 py-2 rounded-md font-sans text-button ${theme === 'dark' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
+          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'dark' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
         >
           Dark
         </button>
         <button 
           onClick={() => setTheme('system')}
-          className={`px-4 py-2 rounded-md font-sans text-button ${theme === 'system' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
+          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'system' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
         >
           System
         </button>
       </div>
       
-      <div className="mt-8 p-6 bg-card border border-border rounded-2xl shadow-sm">
+      <div className="mt-16 p-12 bg-card border border-border rounded-2xl shadow-sm">
         <p className="font-mono text-muted text-sm">JetBrains Mono Example - Lat: 40.7128° N</p>
       </div>
     </div>
@@ -50,9 +50,9 @@ function App() {
           <AppShell>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/search" element={<div className="p-4">Search Page Placeholder</div>} />
-              <Route path="/settings" element={<div className="p-4">Settings Page Placeholder</div>} />
-              <Route path="/about" element={<div className="p-4">About Page Placeholder</div>} />
+              <Route path="/search" element={<div className="p-8">Search Page Placeholder</div>} />
+              <Route path="/settings" element={<div className="p-8">Settings Page Placeholder</div>} />
+              <Route path="/about" element={<div className="p-8">About Page Placeholder</div>} />
             </Routes>
           </AppShell>
         </BrowserRouter>

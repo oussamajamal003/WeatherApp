@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils/cn';
 
 const alertVariants = cva(
-  'relative flex w-full flex-col py-3.5 px-4 border-l-[3px] rounded-[10px] bg-surface shadow-sm [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
+  'relative flex w-full flex-col py-7 px-8 border-l-[3px] rounded-lg bg-surface shadow-sm [&>svg]:absolute [&>svg]:left-8 [&>svg]:top-8 [&>svg]:text-foreground [&>svg~*]:pl-14',
   {
     variants: {
       variant: {
@@ -39,7 +39,7 @@ export const AlertTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttribu
   ({ className, ...props }, ref) => (
     <h5
       ref={ref}
-      className={cn('mb-1 font-medium leading-none tracking-tight', className)}
+      className={cn('mb-2 text-small font-medium', className)}
       {...props}
     />
   )
@@ -50,7 +50,7 @@ export const AlertDescription = React.forwardRef<HTMLParagraphElement, React.HTM
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('text-sm text-subtle [&_p]:leading-relaxed', className)}
+      className={cn('text-small text-subtle', className)}
       {...props}
     />
   )

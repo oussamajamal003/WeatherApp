@@ -11,20 +11,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="relative inline-block w-full">
         {icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle pointer-events-none flex items-center justify-center w-4 h-4">
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-subtle pointer-events-none flex items-center justify-center w-8 h-8">
             {icon}
           </div>
         )}
         <input
           type={type}
           className={cn(
-            'flex h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground transition-colors',
-            'file:border-0 file:bg-transparent file:text-sm file:font-medium',
+            'flex h-20 w-full rounded-md border border-border bg-surface px-6 py-4 text-body text-foreground transition-colors',
+            'file:border-0 file:bg-transparent file:text-body file:font-medium',
             'placeholder:text-subtle',
-            'hover:border-border-hover', // Ensure this exists in theme, or just use border-foreground/30
+            'hover:border-border-hover',
             'focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/15 focus-visible:border-primary',
             'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-disabled',
-            icon && 'pl-9',
+            icon && 'pl-20',
             isInvalid && 'border-destructive focus-visible:ring-destructive/15 focus-visible:border-destructive hover:border-destructive',
             className
           )}
@@ -44,7 +44,7 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, ...props }, ref) => (
     <label
       ref={ref}
-      className={cn('text-sm font-medium leading-none text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70', className)}
+      className={cn('text-label text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70', className)}
       {...props}
     />
   )
@@ -59,7 +59,7 @@ export const HelperText = React.forwardRef<HTMLParagraphElement, HelperTextProps
   ({ className, isInvalid, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-[13px] text-subtle', isInvalid && 'text-destructive', className)}
+      className={cn('text-small text-subtle', isInvalid && 'text-destructive', className)}
       {...props}
     />
   )

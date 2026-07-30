@@ -4,7 +4,7 @@ import { cn } from '../../../utils/cn';
 import { Spinner } from '../Spinner';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-button transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -15,9 +15,9 @@ const buttonVariants = cva(
         ghost: 'hover:bg-surface hover:text-foreground',
       },
       size: {
-        sm: 'h-8 px-3 text-[13px] gap-[6px]',
-        md: 'h-10 px-4 text-[14px] gap-[8px]',
-        lg: 'h-12 px-6 text-[15px] gap-[8px]',
+        sm: 'h-16 px-6 gap-3',
+        md: 'h-20 px-8 gap-4',
+        lg: 'h-24 px-12 gap-4',
       },
     },
     defaultVariants: {
