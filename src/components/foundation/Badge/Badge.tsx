@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils/cn';
 
 const badgeVariants = cva(
-  'inline-flex items-center justify-center rounded-full font-semibold tracking-[0.02em] transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
+  'inline-flex items-center justify-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
   {
     variants: {
       variant: {
@@ -17,8 +17,8 @@ const badgeVariants = cva(
         neutral: 'bg-surface text-subtle border border-border',
       },
       size: {
-        sm: 'py-0.5 px-2 text-[11px]',
-        md: 'py-1 px-2.5 text-[12px]',
+        sm: 'py-1 px-4 text-caption',
+        md: 'py-2 px-5 text-label',
       },
     },
     defaultVariants: {
@@ -41,7 +41,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         {dot && (
           <span
             className={cn(
-              'mr-1.5 h-[5px] w-[5px] rounded-full',
+              'mr-3 h-[5px] w-[5px] rounded-full',
               // Use current text color for the dot to match the badge foreground
               'bg-current'
             )}

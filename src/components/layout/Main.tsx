@@ -7,7 +7,7 @@ interface MainProps {
 
 export function Main({ children, className = '' }: MainProps) {
   return (
-    <main className={`flex-1 w-full max-w-[1280px] mx-auto px-4 pt-3 pb-2 md:px-6 md:py-4 lg:px-8 lg:py-6 ${className}`}>
+    <main className={`flex-1 w-full max-w-[1280px] mx-auto px-8 pt-6 pb-4 md:px-12 md:py-8 lg:px-16 lg:py-12 ${className}`}>
       {children}
     </main>
   );
