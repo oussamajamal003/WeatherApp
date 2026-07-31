@@ -29,11 +29,35 @@ A professional, modern, production-quality weather application designed to provi
    ```bash
    npm install
    ```
-3. **Environment Setup:**
-   Copy `.env.example` to `.env.local` and provide your API keys.
+## Environment Setup
+
+To run the application locally, you must configure your environment variables.
+
+1. **Create the local configuration file:**
+
    ```bash
-   cp .env.example .env.local
+   # Linux / macOS
+   cp .env.example .env
    ```
+
+   ```cmd
+   :: Windows
+   copy .env.example .env
+   ```
+
+2. **Configure your API keys:**
+
+   Open the newly created `.env` file and locate the following line:
+
+   ```env
+   VITE_OPENWEATHER_API_KEY=YOUR_OPENWEATHER_API_KEY
+   ```
+
+   Replace `YOUR_OPENWEATHER_API_KEY` with a valid API key.
+   You can obtain a free API key from:
+   https://home.openweathermap.org/api_keys
+
+> **Note:** `.env` must never be committed to the repository. The `.env.example` file serves as the canonical template for required environment variables.
 
 ## Available Scripts
 
