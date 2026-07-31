@@ -1,46 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeProvider';
-import { useTheme } from './hooks/useTheme';
 import { AppShell } from './components/layout/AppShell';
+
+import { Home, Search, Settings, About } from './pages';
 
 // Create a client
 const queryClient = new QueryClient();
-
-function Home() {
-  const { theme, setTheme } = useTheme();
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[50vh]">
-      <h1 className="text-displayL font-display text-primary">WeatherApp</h1>
-      <p className="mt-8 text-text-secondary font-sans">The application layout is successfully initialized.</p>
-      
-      <div className="mt-16 flex gap-8">
-        <button 
-          onClick={() => setTheme('light')}
-          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'light' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
-        >
-          Light
-        </button>
-        <button 
-          onClick={() => setTheme('dark')}
-          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'dark' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
-        >
-          Dark
-        </button>
-        <button 
-          onClick={() => setTheme('system')}
-          className={`px-8 py-4 rounded-md font-sans text-button ${theme === 'system' ? 'bg-primary text-primary-fg' : 'bg-surface text-text border border-border hover:bg-card-subtle'}`}
-        >
-          System
-        </button>
-      </div>
-      
-      <div className="mt-16 p-12 bg-card border border-border rounded-2xl shadow-sm">
-        <p className="font-mono text-muted text-sm">JetBrains Mono Example - Lat: 40.7128° N</p>
-      </div>
-    </div>
-  );
-}
 
 function App() {
   return (
@@ -50,9 +16,9 @@ function App() {
           <AppShell>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/search" element={<div className="p-8">Search Page Placeholder</div>} />
-              <Route path="/settings" element={<div className="p-8">Settings Page Placeholder</div>} />
-              <Route path="/about" element={<div className="p-8">About Page Placeholder</div>} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </AppShell>
         </BrowserRouter>
