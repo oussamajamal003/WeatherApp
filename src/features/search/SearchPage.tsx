@@ -1,0 +1,162 @@
+import * as React from 'react';
+import { SearchBar, LocationBadge, WeatherCard } from '../../components/weather';
+import { SearchDropdown } from './components/SearchDropdown';
+import { useDebounce } from './hooks/useDebounce';
+import { useSearchHistory } from './hooks/useSearchHistory';
+import { SEARCH_CONSTANTS } from './utils/constants';
+import { useDirectGeocoding } from '../../api/hooks/use-geocoding';
+import { useCurrentWeather } from '../../api/hooks/use-current-weather';
+import type { Location } from '../../types/weather';
+
+export function SearchPage() {
+  const [query, setQuery] = React.useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [focusedIndex, setFocusedIndex] = React.useState(-1);
+  const [selectedLocation, setSelectedLocation] = React.useState<Location | null>(null);
+
+  const debouncedQuery = useDebounce(query, SEARCH_CONSTANTS.DEBOUNCE_MS);
+  const { history, addSearch, clearHistory } = useSearchHistory();
+
+  const isGeocodingEnabled = isDropdownOpen && debouncedQuery.trim().length >= SEARCH_CONSTANTS.MIN_SEARCH_LENGTH;
+  const { data: suggestions, isLoading: isGeocodingLoading, isError: isGeocodingError } = useDirectGeocoding(
+    debouncedQuery,
+    5,
+    { enabled: isGeocodingEnabled }
+  );
+
+  const { data: weatherData, isLoading: isWeatherLoading, isError: isWeatherError } = useCurrentWeather(
+    { lat: selectedLocation?.lat ?? 0, lon: selectedLocation?.lon ?? 0 },
+    { enabled: !!selectedLocation }
+  );
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    setIsDropdownOpen(true);
+    setFocusedIndex(-1);
+    if (value.trim().length === 0) {
+      setSelectedLocation(null);
+    }
+  };
+
+  const handleSelectLocation = (location: Location) => {
+    setQuery(location.name);
+    setIsDropdownOpen(false);
+    setSelectedLocation(location);
+    addSearch(location);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isDropdownOpen || !suggestions || suggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setFocusedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setFocusedIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (focusedIndex >= 0 && focusedIndex < suggestions.length) {
+        handleSelectLocation(suggestions[focusedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setIsDropdownOpen(false);
+      setFocusedIndex(-1);
+    }
+  };
+
+  const handleClear = () => {
+    setQuery('');
+    setSelectedLocation(null);
+    setIsDropdownOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8">
+      <section aria-label="Search Locations" className="relative">
+        <h1 className="text-h2 font-display mb-6 text-foreground">Search Locations</h1>
+        <SearchBar
+          value={query}
+          onChange={handleInputChange}
+          onClear={handleClear}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setIsDropdownOpen(true)}
+          onBlur={() => {
+            // Delay closing to allow clicks on dropdown items
+            setTimeout(() => setIsDropdownOpen(false), 200);
+          }}
+          placeholder="Search for a city or airport..."
+          role="combobox"
+          aria-expanded={isDropdownOpen}
+          aria-controls="search-suggestions"
+          aria-activedescendant={focusedIndex >= 0 ? `suggestion-${focusedIndex}` : undefined}
+        />
+        <SearchDropdown
+          query={debouncedQuery}
+          isOpen={isDropdownOpen}
+          focusedIndex={focusedIndex}
+          suggestions={suggestions}
+          isLoading={isGeocodingLoading}
+          isError={isGeocodingError}
+          onSelect={handleSelectLocation}
+          onHover={setFocusedIndex}
+        />
+      </section>
+
+      {!selectedLocation && (
+        <section aria-label="Recent Searches" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider">
+              Recent Searches
+            </h2>
+            {history.length > 0 && (
+              <button
+                onClick={clearHistory}
+                className="text-small text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
+          
+          {history.length === 0 ? (
+            <p className="text-body text-muted-foreground">No recent searches.</p>
+          ) : (
+            <div className="flex flex-wrap gap-3 mb-8">
+              {history.map((item) => (
+                <LocationBadge
+                  key={item.id}
+                  location={`${item.name}${item.country ? `, ${item.country}` : ''}`}
+                  onClick={() => handleSelectLocation(item)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {selectedLocation && (
+        <section aria-label="Search Results">
+          <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider mb-4">
+            Results for "{selectedLocation.name}"
+          </h2>
+          <div className="flex flex-col gap-4">
+            {isWeatherLoading && (
+              <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
+                Loading weather data...
+              </div>
+            )}
+            {isWeatherError && (
+              <div className="p-8 text-center text-destructive border border-destructive/20 bg-destructive/5 rounded-xl">
+                Failed to load weather data.
+              </div>
+            )}
+            {weatherData && (
+              <WeatherCard data={weatherData} size="md" variant="solid" />
+            )}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
