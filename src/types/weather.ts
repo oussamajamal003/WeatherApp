@@ -23,7 +23,7 @@ export interface WeatherData {
   windDirection: number;
   pressure: number;
   visibility: number;
-  uvIndex: number;
+  uvIndex?: number;
   airQuality: number;
   sunrise: string;
   sunset: string;
@@ -47,4 +47,13 @@ export interface DailyForecastData {
   highTemp: number;
   lowTemp: number;
   precipitationProbability: number;
+}
+
+export interface Location {
+  name: string;
+  localNames?: Record<string, string>;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
 }

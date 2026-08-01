@@ -63,6 +63,16 @@ export class ConfigurationError extends AppError {
   }
 }
 
+/**
+ * Thrown when an API feature (like UV Index) is not available under the current plan.
+ */
+export class FeatureUnavailableError extends AppError {
+  constructor(message = 'This feature is unavailable with the current API subscription.') {
+    super(message, 'FEATURE_UNAVAILABLE');
+    this.name = 'FeatureUnavailableError';
+  }
+}
+
 export class AuthenticationError extends AppError {
   constructor(message = 'Invalid API key or unauthorized access.', details?: unknown) {
     super(message, 'AUTHENTICATION_ERROR', 401, details);
