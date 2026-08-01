@@ -63,6 +63,12 @@ export class ConfigurationError extends AppError {
   }
 }
 
+export class GeolocationError extends AppError {
+  constructor(message = 'Geolocation failed.', details?: unknown) {
+    super(message, 'GEOLOCATION_ERROR', 400, details);
+  }
+}
+
 /**
  * Thrown when an API feature (like UV Index) is not available under the current plan.
  */
