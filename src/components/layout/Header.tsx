@@ -1,19 +1,45 @@
-import { Search } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useGeolocation } from '../../hooks/use-geolocation';
+import { useClearActiveLocation } from '../../hooks/use-active-location';
 
 export function Header() {
+  const { requestLocation } = useGeolocation();
+  const navigate = useNavigate();
+  const clearActiveLocation = useClearActiveLocation();
+
+  const handleUseMyLocation = () => {
+    clearActiveLocation();
+    requestLocation();
+    navigate('/'); // Ensure they are on Home page to see it
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full bg-surface/80 backdrop-blur-xl border-b border-border-subtle h-[52px] md:h-[64px] lg:h-[56px] shrink-0">
       <div className="h-full w-full max-w-[1280px] mx-auto px-8 md:px-12 lg:px-16 flex items-center justify-between">
-        <div className="font-display text-text text-h4 lg:text-h3">WeatherApp</div>
+        <Link to="/" className="font-display text-text text-h4 lg:text-h3 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 -ml-2">
+          WeatherApp
+        </Link>
         
-        {/* Placeholder for global search on Tablet/Desktop */}
-        <div className="hidden md:flex items-center bg-background rounded-full px-8 py-4 border border-border focus-within:border-primary transition-colors min-w-[240px] max-w-[400px] w-full">
-          <Search className="w-8 h-8 text-muted mr-4 shrink-0" />
-          <input 
-            type="text" 
-            placeholder="Search location..." 
-            className="bg-transparent border-none outline-none text-text text-body w-full placeholder:text-muted"
-          />
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleUseMyLocation}
+            className="flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label="Use my location"
+            title="Use my location"
+          >
+            <MapPin className="w-5 h-5" />
+          </button>
+
+          {/* Placeholder for global search on Tablet/Desktop */}
+          <div className="hidden md:flex items-center bg-background rounded-full px-6 py-2.5 border border-border focus-within:border-primary transition-colors min-w-[200px] max-w-[300px] w-full">
+            <Search className="w-5 h-5 text-muted mr-3 shrink-0" />
+            <input 
+              type="text" 
+              placeholder="Search location..." 
+              className="bg-transparent border-none outline-none text-text text-body w-full placeholder:text-muted"
+            />
+          </div>
         </div>
       </div>
     </header>

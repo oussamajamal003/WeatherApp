@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useGeolocation } from '../hooks/use-geolocation';
+import { useFavorites } from '../hooks/use-favorites';
+import { useActiveLocation } from '../hooks/use-active-location';
+import { StartupLocationService } from '../services/startup-location.service';
 import { SearchPage } from '../features/search/SearchPage';
 import { 
   WeatherCard, 
@@ -170,14 +173,48 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
 }
 
 export function Home() {
-  const { coordinates, permissionStatus, isLoading, error, requestLocation } = useGeolocation();
+  const { coordinates: geoCoordinates, permissionStatus: geoPermissionStatus, isLoading: isGeoLoading, error: geoError, requestLocation } = useGeolocation();
+  const { data: favorites = [] } = useFavorites();
+  const { data: activeLocation = null } = useActiveLocation();
+  
+  const firstFavorite = favorites.length > 0 ? favorites[0] : null;
 
-  if (coordinates) {
-    return <WeatherDashboard coordinates={coordinates} />;
+  const resolution = StartupLocationService.resolve({
+    activeLocation,
+    geoCoordinates,
+    isGeoLoading,
+    geoError,
+    geoPermissionStatus,
+    firstFavorite,
+  });
+
+  if (resolution.type === 'active-location' || resolution.type === 'geolocation' || resolution.type === 'favorite') {
+    if (resolution.location) {
+      return <WeatherDashboard coordinates={{ lat: resolution.location.lat, lon: resolution.location.lon }} />;
+    }
   }
 
-  // Only show the error banner/fallback if a location request has failed (i.e. error is present).
-  if (error) {
+  if (resolution.type === 'loading-geolocation') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4 animate-in fade-in duration-500">
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <MapPin className="w-8 h-8" />
+        </div>
+        <div className="flex flex-col gap-2 max-w-md">
+          <h1 className="text-h3 font-display">Local Weather</h1>
+          <p className="text-body text-muted-foreground">
+            WeatherApp uses your location to provide accurate, real-time weather forecasts for your area.
+          </p>
+        </div>
+        <div className="flex items-center gap-3 text-primary mt-4">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span className="font-medium">Locating...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (resolution.type === 'error-geolocation') {
     return (
       <div className="flex flex-col w-full animate-in fade-in duration-500 gap-8">
         <div className="max-w-3xl mx-auto w-full px-4 pt-8 flex flex-col gap-4">
@@ -187,27 +224,20 @@ export function Home() {
             </div>
             <div className="flex-1">
               <h3 className="text-body font-medium text-text mb-1">
-                {permissionStatus === 'denied' ? 'Location Access Blocked' : 'Location Error'}
+                {geoPermissionStatus === 'denied' ? 'Location Access Blocked' : 'Location Error'}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {permissionStatus === 'denied' 
+                {geoPermissionStatus === 'denied' 
                   ? 'To use your current location, please enable Location permission for this site in your browser settings.'
-                  : error?.message || 'Unable to retrieve your location.'}
+                  : geoError?.message || 'Unable to retrieve your location.'}
               </p>
             </div>
             <button
               onClick={requestLocation}
-              disabled={isLoading}
+              disabled={isGeoLoading}
               className="mt-4 md:mt-0 whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-5 py-2.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Retrying...
-                </>
-              ) : (
-                'Retry Location'
-              )}
+              Retry Location
             </button>
           </div>
         </div>
@@ -216,26 +246,20 @@ export function Home() {
     );
   }
 
-  // If we are waiting for permission or currently locating
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4 animate-in fade-in duration-500">
-      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-        <MapPin className="w-8 h-8" />
-      </div>
-      
-      <div className="flex flex-col gap-2 max-w-md">
-        <h1 className="text-h3 font-display">Local Weather</h1>
-        <p className="text-body text-muted-foreground">
-          WeatherApp uses your location to provide accurate, real-time weather forecasts for your area.
-        </p>
-      </div>
-
-      {isLoading ? (
-        <div className="flex items-center gap-3 text-primary mt-4">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          <span className="font-medium">Locating...</span>
+  if (resolution.type === 'welcome') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4 animate-in fade-in duration-500">
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <MapPin className="w-8 h-8" />
         </div>
-      ) : (
+        
+        <div className="flex flex-col gap-2 max-w-md">
+          <h1 className="text-h3 font-display">Local Weather</h1>
+          <p className="text-body text-muted-foreground">
+            WeatherApp uses your location to provide accurate, real-time weather forecasts for your area.
+          </p>
+        </div>
+  
         <div className="flex flex-col items-center gap-4 mt-4 w-full max-w-xs">
           <button
             onClick={requestLocation}
@@ -253,7 +277,10 @@ export function Home() {
             Search Manually
           </Link>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  // Fallback (resolution.type === 'search')
+  return <SearchPage />;
 }
