@@ -2,6 +2,7 @@ import { Search, MapPin } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGeolocation } from '../../hooks/use-geolocation';
 import { useClearActiveLocation } from '../../hooks/use-active-location';
+import { IconButton } from '../foundation/Button/IconButton';
 
 export function Header() {
   const { requestLocation } = useGeolocation();
@@ -22,14 +23,14 @@ export function Header() {
         </Link>
         
         <div className="flex items-center gap-4">
-          <button
+          <IconButton
             onClick={handleUseMyLocation}
-            className="flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            aria-label="Use my location"
-            title="Use my location"
+            className="text-muted-foreground hover:text-primary hover:bg-primary/10"
+            aria-label="Use my current location"
+            title="Use my current location"
           >
-            <MapPin className="w-5 h-5" />
-          </button>
+            <MapPin />
+          </IconButton>
 
           {/* Placeholder for global search on Tablet/Desktop */}
           <div className="hidden md:flex items-center bg-background rounded-full px-6 py-2.5 border border-border focus-within:border-primary transition-colors min-w-[200px] max-w-[300px] w-full">
