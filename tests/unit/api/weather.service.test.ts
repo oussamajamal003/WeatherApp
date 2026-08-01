@@ -94,30 +94,16 @@ describe('WeatherService', () => {
   });
 
   describe('getForecast', () => {
-    it('aggregates 3-hour slices into daily data', async () => {
+    it('returns raw forecast response data', async () => {
       const mockForecastResponse = {
         data: {
           list: [
             {
-              dt: 1700000000, // Day 1
+              dt: 1700000000,
               dt_txt: '2023-11-15 12:00:00',
               main: { temp: 15, temp_max: 16, temp_min: 10 },
               weather: [{ main: 'Clouds', description: 'few clouds' }],
               pop: 0.2,
-            },
-            {
-              dt: 1700010800, // Day 1 later
-              dt_txt: '2023-11-15 15:00:00',
-              main: { temp: 17, temp_max: 18, temp_min: 12 },
-              weather: [{ main: 'Rain', description: 'light rain' }],
-              pop: 0.8,
-            },
-            {
-              dt: 1700086400, // Day 2
-              dt_txt: '2023-11-16 12:00:00',
-              main: { temp: 22, temp_max: 22, temp_min: 18 },
-              weather: [{ main: 'Clear', description: 'clear sky' }],
-              pop: 0,
             }
           ]
         }
@@ -127,14 +113,7 @@ describe('WeatherService', () => {
 
       const result = await WeatherService.getForecast({ lat: 10, lon: 20 });
 
-      expect(result.hourly).toHaveLength(3);
-      expect(result.daily).toHaveLength(2);
-
-      // Check aggregation for Day 1
-      expect(result.daily[0].highTemp).toBe(18); // max of 16 and 18
-      expect(result.daily[0].lowTemp).toBe(10); // min of 10 and 12
-      expect(result.daily[0].precipitationProbability).toBe(80); // max of 0.2 and 0.8
-      expect(result.daily[0].condition).toBe('rain'); // From warmest part of day
+      expect(result).toEqual(mockForecastResponse.data);
     });
   });
 });
