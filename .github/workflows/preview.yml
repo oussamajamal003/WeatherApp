@@ -1,11 +1,14 @@
 name: Preview Deployment
 
 on:
+  # NOTE: The pull_request trigger is appropriate for private/trusted repositories.
+  # If this repository is made public, this deployment strategy should be reviewed 
+  # to prevent untrusted code in forks from accessing VERCEL_TOKEN and GITHUB_TOKEN secrets.
   pull_request:
     branches: [ main, develop ]
 
 concurrency:
-  group: preview-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
