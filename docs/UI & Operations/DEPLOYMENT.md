@@ -109,3 +109,9 @@ If a production issue occurs:
 - Environment variables configured
 - Documentation updated
 - Production deployment verified
+
+---
+
+## Security Considerations
+
+> **Note:** The current Preview deployment workflow assumes this is a trusted/private repository. If the repository is ever made public or begins accepting contributions from external forks, the deployment strategy must be re-evaluated to prevent untrusted code from accessing deployment secrets.
