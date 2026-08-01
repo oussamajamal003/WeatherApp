@@ -69,6 +69,18 @@ export class GeolocationError extends AppError {
   }
 }
 
+export class OfflineError extends AppError {
+  constructor(message = 'You are currently offline. Please connect to the internet and try again.', details?: unknown) {
+    super(message, 'OFFLINE_ERROR', 0, details);
+  }
+}
+
+export class ClientError extends AppError {
+  constructor(message = 'A client-side error occurred.', statusCode = 400, details?: unknown) {
+    super(message, 'CLIENT_ERROR', statusCode, details);
+  }
+}
+
 /**
  * Thrown when an API feature (like UV Index) is not available under the current plan.
  */
@@ -121,6 +133,13 @@ export function mapApiError(error: unknown): AppError {
     if (error.code === 'ECONNABORTED') {
       return new TimeoutError(undefined, error.toJSON());
     }
+    
+    if (error.code === 'ERR_NETWORK' || !navigator.onLine) {
+      if (!navigator.onLine) {
+        return new OfflineError(undefined, error.toJSON());
+      }
+      return new NetworkError(undefined, error.toJSON());
+    }
 
     if (!error.response) {
       return new NetworkError(undefined, error.toJSON());
@@ -144,6 +163,9 @@ export function mapApiError(error: unknown): AppError {
       default:
         if (status >= 500) {
           return new ServerError(apiMessage, status, data);
+        }
+        if (status >= 400 && status < 500) {
+          return new ClientError(apiMessage, status, data);
         }
         return new APIError(apiMessage, status, data);
     }

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Navigation } from './Navigation';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { OfflineBanner } from '../feedback/OfflineBanner';
 import { Main } from './Main';
 
 interface AppShellProps {
@@ -14,7 +15,10 @@ export function AppShell({ children }: AppShellProps) {
       <Navigation />
       
       <div className="flex-1 flex flex-col min-w-0">
-        <Header />
+        <div className="sticky top-0 z-50 flex flex-col w-full">
+          <OfflineBanner />
+          <Header />
+        </div>
         
         <Main>
           {children}

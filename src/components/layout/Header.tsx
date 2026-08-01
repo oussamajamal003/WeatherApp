@@ -16,7 +16,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-surface/80 backdrop-blur-xl border-b border-border-subtle h-[52px] md:h-[64px] lg:h-[56px] shrink-0">
+    <header className="w-full bg-surface/80 backdrop-blur-xl border-b border-border-subtle h-[52px] md:h-[64px] lg:h-[56px] shrink-0">
       <div className="h-full w-full max-w-[1280px] mx-auto px-8 md:px-12 lg:px-16 flex items-center justify-between">
         <Link to="/" className="font-display text-text text-h4 lg:text-h3 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md px-2 -ml-2">
           WeatherApp
