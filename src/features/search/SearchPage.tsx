@@ -1,14 +1,18 @@
 import * as React from 'react';
-import { SearchBar, LocationBadge, WeatherCard } from '../../components/weather';
+import { useNavigate } from 'react-router-dom';
+import { SearchBar, LocationBadge, WeatherCard, ToggleFavoriteButton } from '../../components/weather';
 import { SearchDropdown } from './components/SearchDropdown';
 import { useDebounce } from './hooks/useDebounce';
 import { useSearchHistory } from './hooks/useSearchHistory';
 import { SEARCH_CONSTANTS } from './utils/constants';
 import { useDirectGeocoding } from '../../api/hooks/use-geocoding';
 import { useCurrentWeather } from '../../api/hooks/use-current-weather';
+import { useSetActiveLocation } from '../../hooks/use-active-location';
+import { FavoritesSection } from '../favorites';
 import type { Location } from '../../types/weather';
 
 export function SearchPage() {
+  const navigate = useNavigate();
   const [query, setQuery] = React.useState('');
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const [focusedIndex, setFocusedIndex] = React.useState(-1);
@@ -16,6 +20,7 @@ export function SearchPage() {
 
   const debouncedQuery = useDebounce(query, SEARCH_CONSTANTS.DEBOUNCE_MS);
   const { history, addSearch, clearHistory } = useSearchHistory();
+  const setActiveLocation = useSetActiveLocation();
 
   const isGeocodingEnabled = isDropdownOpen && debouncedQuery.trim().length >= SEARCH_CONSTANTS.MIN_SEARCH_LENGTH;
   const { data: suggestions, isLoading: isGeocodingLoading, isError: isGeocodingError } = useDirectGeocoding(
@@ -43,6 +48,7 @@ export function SearchPage() {
     setIsDropdownOpen(false);
     setSelectedLocation(location);
     addSearch(location);
+    setActiveLocation.mutate(location);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -104,6 +110,16 @@ export function SearchPage() {
       </section>
 
       {!selectedLocation && (
+        <FavoritesSection 
+          onSelectFavorite={(location) => {
+            handleSelectLocation(location);
+            navigate('/');
+          }} 
+          className="mb-8" 
+        />
+      )}
+
+      {!selectedLocation && (
         <section aria-label="Recent Searches" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider">
@@ -137,9 +153,20 @@ export function SearchPage() {
 
       {selectedLocation && (
         <section aria-label="Search Results">
-          <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider mb-4">
-            Results for "{selectedLocation.name}"
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider">
+              Results for "{selectedLocation.name}"
+            </h2>
+            <ToggleFavoriteButton 
+              location={selectedLocation} 
+              size="sm" 
+              onToggle={(isNowFavorite) => {
+                if (isNowFavorite) {
+                  navigate('/');
+                }
+              }}
+            />
+          </div>
           <div className="flex flex-col gap-4">
             {isWeatherLoading && (
               <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
