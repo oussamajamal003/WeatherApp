@@ -25,27 +25,37 @@ import { useCurrentWeather } from '../api/hooks/use-current-weather';
 import { useForecast } from '../api/hooks/use-forecast';
 import { useAirQuality } from '../api/hooks/use-air-quality';
 import { MapPin, Loader2 } from 'lucide-react';
+import { ErrorState } from '../components/feedback/ErrorState';
 import type { Coordinates } from '../types/geolocation';
 
 function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
-  const { data: currentWeather, isLoading: isWeatherLoading } = useCurrentWeather({
+  const { data: currentWeather, isLoading: isWeatherLoading, isError: isWeatherError, error: weatherError, refetch: refetchWeather } = useCurrentWeather({
     lat: coordinates.lat,
     lon: coordinates.lon,
   });
 
-  const { data: forecast, isLoading: isForecastLoading } = useForecast({
+  const { data: forecast, isLoading: isForecastLoading, isError: isForecastError, error: forecastError, refetch: refetchForecast } = useForecast({
     lat: coordinates.lat,
     lon: coordinates.lon,
   });
 
-  const { data: airQuality, isLoading: isAqiLoading } = useAirQuality(
+  const { data: airQuality, isLoading: isAqiLoading, isError: isAqiError, error: aqiError, refetch: refetchAqi } = useAirQuality(
     coordinates.lat,
     coordinates.lon
   );
 
   const isLoading = isWeatherLoading || isForecastLoading || isAqiLoading;
+  const isError = isWeatherError || isForecastError || isAqiError;
+  const combinedError = weatherError || forecastError || aqiError;
 
-  if (isLoading) {
+  const handleRetry = () => {
+    refetchWeather();
+    refetchForecast();
+    refetchAqi();
+  };
+
+  // If we are actively loading (no cache yet)
+  if (isLoading && (!currentWeather || !forecast || airQuality === undefined)) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -53,12 +63,20 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
     );
   }
 
-  if (!currentWeather || !forecast || airQuality === undefined) {
+  // If there's an error AND we have no cached data to fall back on
+  if (isError && (!currentWeather || !forecast || airQuality === undefined)) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center gap-4">
-        <p className="text-destructive font-medium">Failed to load weather data.</p>
+      <div className="flex items-center justify-center min-h-[50vh] p-4">
+        <ErrorState error={combinedError} onRetry={handleRetry} />
       </div>
     );
+  }
+
+  // At this point, we have data (either fresh or cached).
+  // If we wanted to, we could show an inline toast/banner if isError is true, 
+  // but we already have the global OfflineBanner.
+  if (!currentWeather || !forecast || airQuality === undefined) {
+    return null; // Should never hit based on above checks, but handles TS correctly
   }
 
   // Combine currentWeather with AQI data since WeatherCard expects it

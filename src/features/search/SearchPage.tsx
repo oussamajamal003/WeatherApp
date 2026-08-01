@@ -9,6 +9,7 @@ import { useDirectGeocoding } from '../../api/hooks/use-geocoding';
 import { useCurrentWeather } from '../../api/hooks/use-current-weather';
 import { useSetActiveLocation } from '../../hooks/use-active-location';
 import { FavoritesSection } from '../favorites';
+import { ErrorState } from '../../components/feedback/ErrorState';
 import type { Location } from '../../types/weather';
 
 export function SearchPage() {
@@ -29,7 +30,7 @@ export function SearchPage() {
     { enabled: isGeocodingEnabled }
   );
 
-  const { data: weatherData, isLoading: isWeatherLoading, isError: isWeatherError } = useCurrentWeather(
+  const { data: weatherData, isLoading: isWeatherLoading, isError: isWeatherError, error: weatherError, refetch: refetchWeather } = useCurrentWeather(
     { lat: selectedLocation?.lat ?? 0, lon: selectedLocation?.lon ?? 0 },
     { enabled: !!selectedLocation }
   );
@@ -173,10 +174,11 @@ export function SearchPage() {
                 Loading weather data...
               </div>
             )}
-            {isWeatherError && (
-              <div className="p-8 text-center text-destructive border border-destructive/20 bg-destructive/5 rounded-xl">
-                Failed to load weather data.
-              </div>
+            {isWeatherError && !weatherData && (
+              <ErrorState 
+                error={weatherError} 
+                onRetry={() => refetchWeather()} 
+              />
             )}
             {weatherData && (
               <WeatherCard data={weatherData} size="md" variant="solid" />
