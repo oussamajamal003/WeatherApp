@@ -10,6 +10,7 @@ import { useCurrentWeather } from '../../api/hooks/use-current-weather';
 import { useSetActiveLocation } from '../../hooks/use-active-location';
 import { FavoritesSection } from '../favorites';
 import { EmptyState } from '../../components/feedback/EmptyState';
+import { ErrorState } from '../../components/feedback/ErrorState';
 import type { Location } from '../../types/weather';
 import { useDocumentTitle } from '../../hooks/use-document-title';
 import { useToast } from '../../hooks/useToast';
