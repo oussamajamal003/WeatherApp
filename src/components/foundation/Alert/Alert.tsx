@@ -7,7 +7,7 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        info: 'border-l-blue-500 text-foreground [&>svg]:text-blue-500',
+        info: 'border-l-blue-600 dark:border-l-blue-400 text-foreground [&>svg]:text-blue-600 dark:[&>svg]:text-blue-400',
         success: 'border-l-green-500 text-foreground [&>svg]:text-green-500',
         warning: 'border-l-amber-500 text-foreground [&>svg]:text-amber-500',
         error: 'border-l-destructive text-foreground [&>svg]:text-destructive',

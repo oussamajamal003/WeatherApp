@@ -94,7 +94,9 @@ export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
               <div className="flex items-center gap-4 mt-4 text-caption text-subtle">
                 <span>H: {Math.round(data.temperature + 4)}°</span>
                 <span>L: {Math.round(data.temperature - 6)}°</span>
-                <span className="ml-auto text-blue-500 font-medium">💧 {data.humidity}%</span>
+                {data.humidity !== undefined && (
+                <span className="ml-auto text-blue-600 dark:text-blue-400 font-medium">💧 {data.humidity}%</span>
+              )}
               </div>
             )}
           </div>

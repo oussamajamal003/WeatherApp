@@ -27,7 +27,7 @@ export function Navigation() {
               }
               title={item.label}
             >
-              <item.icon className="w-6 h-6 shrink-0" />
+              <item.icon aria-hidden="true" className="w-6 h-6 shrink-0" />
               <span className="hidden lg:block font-medium text-body">{item.label}</span>
             </NavLink>
           ))}
@@ -46,7 +46,7 @@ export function Navigation() {
               }`
             }
           >
-            <item.icon className="w-6 h-6 shrink-0" />
+            <item.icon aria-hidden="true" className="w-6 h-6 shrink-0" />
             <span className="text-caption font-medium">{item.label}</span>
           </NavLink>
         ))}

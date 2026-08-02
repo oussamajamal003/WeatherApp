@@ -25,6 +25,7 @@ import { useCurrentWeather } from '../api/hooks/use-current-weather';
 import { useForecast } from '../api/hooks/use-forecast';
 import { MapPin, Loader2 } from 'lucide-react';
 import type { Coordinates } from '../types/geolocation';
+import { useDocumentTitle } from '../hooks/use-document-title';
 
 function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
   const { data: currentWeather, isPending: isWeatherLoading, error: weatherError } = useCurrentWeather({
@@ -162,6 +163,7 @@ export function Home() {
   const { coordinates: geoCoordinates, permissionStatus: geoPermissionStatus, isLoading: isGeoLoading, error: geoError, requestLocation } = useGeolocation();
   const { data: favorites = [] } = useFavorites();
   const { data: activeLocation = null } = useActiveLocation();
+  useDocumentTitle('WeatherApp | Home');
   
   const firstFavorite = favorites.length > 0 ? favorites[0] : null;
 
