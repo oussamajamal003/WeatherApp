@@ -23,74 +23,38 @@ import {
 import { Card, CardContent } from '../components/foundation/Card/Card';
 import { useCurrentWeather } from '../api/hooks/use-current-weather';
 import { useForecast } from '../api/hooks/use-forecast';
-import { useAirQuality } from '../api/hooks/use-air-quality';
 import { MapPin, Loader2 } from 'lucide-react';
-import { ErrorState } from '../components/feedback/ErrorState';
 import type { Coordinates } from '../types/geolocation';
 
 function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
-  const { data: currentWeather, isLoading: isWeatherLoading, isError: isWeatherError, error: weatherError, refetch: refetchWeather } = useCurrentWeather({
+  const { data: currentWeather, isPending: isWeatherLoading, error: weatherError } = useCurrentWeather({
     lat: coordinates.lat,
     lon: coordinates.lon,
   });
 
-  const { data: forecast, isLoading: isForecastLoading, isError: isForecastError, error: forecastError, refetch: refetchForecast } = useForecast({
+  const { data: forecast, isPending: isForecastLoading, error: forecastError } = useForecast({
     lat: coordinates.lat,
     lon: coordinates.lon,
+    units: 'metric',
   });
 
-  const { data: airQuality, isLoading: isAqiLoading, isError: isAqiError, error: aqiError, refetch: refetchAqi } = useAirQuality(
-    coordinates.lat,
-    coordinates.lon
-  );
-
-  const isLoading = isWeatherLoading || isForecastLoading || isAqiLoading;
-  const isError = isWeatherError || isForecastError || isAqiError;
-  const combinedError = weatherError || forecastError || aqiError;
-
-  const handleRetry = () => {
-    refetchWeather();
-    refetchForecast();
-    refetchAqi();
-  };
-
-  // If we are actively loading (no cache yet)
-  if (isLoading && (!currentWeather || !forecast || airQuality === undefined)) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  // If there's an error AND we have no cached data to fall back on
-  if (isError && (!currentWeather || !forecast || airQuality === undefined)) {
-    return (
-      <div className="flex items-center justify-center min-h-[50vh] p-4">
-        <ErrorState error={combinedError} onRetry={handleRetry} />
-      </div>
-    );
-  }
-
-  // At this point, we have data (either fresh or cached).
-  // If we wanted to, we could show an inline toast/banner if isError is true, 
-  // but we already have the global OfflineBanner.
-  if (!currentWeather || !forecast || airQuality === undefined) {
-    return null; // Should never hit based on above checks, but handles TS correctly
-  }
-
-  // Combine currentWeather with AQI data since WeatherCard expects it
-  const weatherWithAqi = {
-    ...currentWeather,
-    airQuality: airQuality,
-  };
+  console.log('[WeatherDashboard] Render:', {
+    isWeatherLoading,
+    weatherError: !!weatherError,
+    hasWeather: !!currentWeather,
+    isForecastLoading,
+    forecastError: !!forecastError,
+    hasForecast: !!forecast,
+  });
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       {/* Hero Section */}
       <section aria-label="Current Weather">
         <WeatherCard 
-          data={weatherWithAqi} 
+          data={currentWeather}
+          isLoading={isWeatherLoading}
+          error={weatherError}
           size="lg" 
           variant="glass" 
           className="w-full"
@@ -104,30 +68,34 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
           
           {/* Hourly Forecast */}
           <section aria-label="Hourly Forecast">
-            <ForecastCard title="Hourly Forecast">
-              <div className="flex overflow-x-auto pb-2 gap-6 scrollbar-hide snap-x">
-                {forecast.hourly.map((hour, index) => (
-                  <div key={index} className="snap-start shrink-0">
-                    <HourlyForecastCard data={hour} />
-                  </div>
-                ))}
-              </div>
+            <ForecastCard title="Hourly Forecast" isLoading={isForecastLoading} error={forecastError}>
+              {forecast?.hourly && forecast.hourly.length > 0 && (
+                <div className="flex overflow-x-auto pb-2 gap-6 scrollbar-hide snap-x">
+                  {forecast.hourly.map((hour, index) => (
+                    <div key={index} className="snap-start shrink-0">
+                      <HourlyForecastCard data={hour} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </ForecastCard>
           </section>
           
           {/* Daily Forecast */}
           <section aria-label="5-Day Forecast">
-            <ForecastCard title="5-Day Forecast">
-              <div className="flex flex-col gap-2">
-                {forecast.daily.map((day, index) => (
-                  <div key={index}>
-                    <DailyForecastCard data={day} isToday={index === 0} />
-                    {index < forecast.daily.length - 1 && (
-                      <hr className="border-border/50 my-1" />
-                    )}
-                  </div>
-                ))}
-              </div>
+            <ForecastCard title="5-Day Forecast" isLoading={isForecastLoading} error={forecastError}>
+              {forecast?.daily && forecast.daily.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  {forecast.daily.map((day, index) => (
+                    <div key={index}>
+                      <DailyForecastCard data={day} isToday={index === 0} />
+                      {index < forecast.daily.length - 1 && (
+                        <hr className="border-border/50 my-1" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </ForecastCard>
           </section>
 
@@ -138,48 +106,48 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
           <section aria-label="Weather Details" className="grid grid-cols-2 gap-4">
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <FeelsLike value={currentWeather.feelsLike} size="md" />
+                <FeelsLike value={currentWeather?.feelsLike} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <UVIndex value={currentWeather.uvIndex} size="md" />
+                <UVIndex value={currentWeather?.uvIndex} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <Wind speed={currentWeather.windSpeed} direction={currentWeather.windDirection} size="md" />
+                <Wind speed={currentWeather?.windSpeed} direction={currentWeather?.windDirection} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <Humidity value={currentWeather.humidity} size="md" />
+                <Humidity value={currentWeather?.humidity} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <Visibility value={currentWeather.visibility} size="md" />
+                <Visibility value={currentWeather?.visibility} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">
-                <Pressure value={currentWeather.pressure} size="md" />
+                <Pressure value={currentWeather?.pressure} size="md" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact" className="col-span-2">
               <CardContent className="h-full flex flex-col justify-center">
-                <AirQuality value={airQuality} size="md" orientation="horizontal" />
+                <AirQuality value={currentWeather?.airQuality} size="md" orientation="horizontal" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact" className="col-span-2">
               <CardContent className="h-full flex flex-row items-center justify-between">
-                <Sunrise time={currentWeather.sunrise} size="sm" />
-                <Sunset time={currentWeather.sunset} size="sm" />
+                <Sunrise time={currentWeather?.sunrise} size="sm" isLoading={isWeatherLoading} />
+                <Sunset time={currentWeather?.sunset} size="sm" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
             <Card variant="glass" padding="compact" className="col-span-2">
               <CardContent className="h-full flex flex-col justify-center">
-                <MoonPhase phase={currentWeather.moonPhase} size="md" orientation="horizontal" />
+                <MoonPhase phase={currentWeather?.moonPhase} size="md" orientation="horizontal" isLoading={isWeatherLoading} />
               </CardContent>
             </Card>
           </section>

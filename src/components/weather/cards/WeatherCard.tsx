@@ -4,9 +4,14 @@ import { WeatherIcon } from '../utilities/WeatherIcon';
 import { Temperature } from '../metrics/Temperature';
 import type { WeatherData } from '../../../types/weather';
 import { cn } from '../../../utils/cn';
+import { LoadingWeatherCard } from '../status/LoadingWeatherCard';
+import { ErrorWeatherCard } from '../status/ErrorWeatherCard';
+import { formatDate } from '../../../utils/formatters/weather';
 
 export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  data: WeatherData;
+  data?: WeatherData;
+  isLoading?: boolean;
+  error?: Error | null;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'glass' | 'solid' | 'minimal';
   selected?: boolean;
@@ -14,8 +19,9 @@ export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
   elevation?: 0 | 1 | 2 | 3;
 }
 
+
 export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
-  ({ data, size = 'md', variant = 'glass', selected = false, theme, elevation = 2, className, ...props }, ref) => {
+  ({ data, isLoading, error, size = 'md', variant = 'glass', selected = false, theme, elevation = 2, className, ...props }, ref) => {
     
     // Map size to padding/radius
     const paddingMap = {
@@ -36,6 +42,16 @@ export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
                       : 'elevated'; // solid -> elevated
 
     const elevationClass = `shadow-[var(--shadow-elevation-${elevation})]`;
+
+    if (isLoading) {
+      return <LoadingWeatherCard size={size} className={className} />;
+    }
+
+    if (error) {
+      return <ErrorWeatherCard error={error.message} size={size} className={className} onRetry={() => {}} />
+    }
+
+    if (!data) return null;
 
     return (
       <Card
@@ -59,7 +75,7 @@ export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
             <div className="flex flex-col gap-1">
               <span className="text-small font-medium text-foreground">{data.locationName}</span>
               {size !== 'sm' && (
-                <span className="text-caption text-subtle">Updated {data.updatedAt}</span>
+                <span className="text-caption text-subtle">Updated {formatDate(data.updatedAt)}</span>
               )}
             </div>
             <WeatherIcon condition={data.condition} size={size === 'sm' ? 'sm' : 'md'} />

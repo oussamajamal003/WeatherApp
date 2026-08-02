@@ -5,35 +5,10 @@ import { parseApiResponse } from '../utils/api';
 import { AirQualityService } from './air-quality.service';
 import { UVService } from './uv.service';
 import { API_ENDPOINTS } from './endpoints';
-import type { OpenWeatherCurrentResponse, OpenWeatherForecastResponse, OpenWeatherWeatherItem } from './models';
-import type { WeatherData, WeatherCondition } from '../types/weather';
+import type { OpenWeatherCurrentResponse, OpenWeatherForecastResponse } from './models';
+import type { WeatherData } from '../types/weather';
 import type { WeatherRequest, ForecastRequest } from '../types/api';
-
-/**
- * Maps OpenWeather API weather conditions to our internal domain type.
- */
-export function mapCondition(weatherItems: OpenWeatherWeatherItem[]): WeatherCondition {
-  if (!weatherItems || weatherItems.length === 0) return 'clear';
-  
-  const main = weatherItems[0].main.toLowerCase();
-  const desc = weatherItems[0].description.toLowerCase();
-  
-  if (main === 'clear') return 'clear';
-  if (main === 'clouds') {
-    if (desc.includes('few') || desc.includes('scattered')) return 'partlyCloudy';
-    if (desc.includes('overcast')) return 'overcast';
-    return 'cloudy';
-  }
-  if (main === 'rain') return 'rain';
-  if (main === 'drizzle') return 'drizzle';
-  if (main === 'thunderstorm') return 'thunderstorm';
-  if (main === 'snow') return 'snow';
-  if (main === 'mist') return 'mist';
-  if (main === 'fog') return 'fog';
-  if (main === 'haze') return 'haze';
-  
-  return 'clear'; // fallback
-}
+import { mapWeatherResponse } from '../mappers/weather.mapper';
 
 /**
  * Service responsible for fetching Current Weather and Forecasts.
@@ -72,26 +47,8 @@ export const WeatherService = {
       ]);
       
       const apiResponse = parseApiResponse(weatherRes);
-      const data = apiResponse.data;
-
-      return {
-        condition: mapCondition(data.weather),
-        temperature: Math.round(data.main.temp),
-        feelsLike: Math.round(data.main.feels_like),
-        humidity: data.main.humidity,
-        windSpeed: data.wind.speed,
-        windDirection: data.wind.deg,
-        pressure: data.main.pressure,
-        visibility: data.visibility,
-        uvIndex,
-        airQuality,
-        sunrise: new Date(data.sys.sunrise * 1000).toISOString(),
-        sunset: new Date(data.sys.sunset * 1000).toISOString(),
-        moonPhase: 'Unknown', // OpenWeather free tier doesn't provide moon phase
-        description: data.weather[0]?.description || 'clear',
-        locationName: data.name,
-        updatedAt: new Date(data.dt * 1000).toISOString(),
-      };
+      
+      return mapWeatherResponse(apiResponse.data, uvIndex, airQuality);
     } catch (error) {
       throw mapApiError(error);
     }

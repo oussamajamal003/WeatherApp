@@ -1,13 +1,8 @@
-import { createContext, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { GeolocationService } from '../services/geolocation.service';
-import type { Coordinates, PermissionStatusState, GeolocationState } from '../types/geolocation';
-
-export interface GeolocationContextValue extends GeolocationState {
-  requestLocation: () => Promise<void>;
-}
-
-export const GeolocationContext = createContext<GeolocationContextValue | undefined>(undefined);
+import type { Coordinates, PermissionStatusState } from '../types/geolocation';
+import { GeolocationContext, type GeolocationContextValue } from './GeolocationContext';
 
 interface GeolocationProviderProps {
   children: ReactNode;
