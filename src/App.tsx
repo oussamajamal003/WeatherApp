@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { SettingsProvider } from './context/SettingsContext';
 import { ThemeProvider } from './context/ThemeProvider';
 import { GeolocationProvider } from './context/GeolocationProvider';
 import { AppShell } from './components/layout/AppShell';
@@ -17,28 +18,30 @@ const About = lazy(() => import('./pages/About').then(m => ({ default: m.About }
 
 function App() {
   return (
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <GeolocationProvider>
-          <ToastProvider>
-            <BrowserRouter>
-              <ErrorBoundary>
-              <AppShell>
-                  <Suspense fallback={<RouteLoader />}>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/search" element={<Search />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/about" element={<About />} />
-                    </Routes>
-                  </Suspense>
-                </AppShell>
-              </ErrorBoundary>
-            </BrowserRouter>
-          </ToastProvider>
-        </GeolocationProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <SettingsProvider>
+              <ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <GeolocationProvider>
+              <ToastProvider>
+                <BrowserRouter>
+                  <ErrorBoundary>
+                    <AppShell>
+                      <Suspense fallback={<RouteLoader />}>
+                        <Routes>
+                          <Route path="/" element={<Home />} />
+                          <Route path="/search" element={<Search />} />
+                          <Route path="/settings" element={<Settings />} />
+                          <Route path="/about" element={<About />} />
+                        </Routes>
+                      </Suspense>
+                    </AppShell>
+                  </ErrorBoundary>
+                </BrowserRouter>
+              </ToastProvider>
+            </GeolocationProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+          </SettingsProvider>
   );
 }
 

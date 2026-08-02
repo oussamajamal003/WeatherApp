@@ -14,12 +14,11 @@ import { ErrorState } from '../../components/feedback/ErrorState';
 import type { Location } from '../../types/weather';
 import { useDocumentTitle } from '../../hooks/use-document-title';
 import { useToast } from '../../hooks/useToast';
-import { EMPTY_STATE_MESSAGES } from '../../constants/empty-state-messages';
-import { TOAST_MESSAGES } from '../../constants/toast-messages';
-import { RECOVERY_ACTIONS } from '../../constants/error-messages';
+import { useTranslation } from 'react-i18next';
 
 export function SearchPage() {
-  useDocumentTitle('WeatherApp | Search');
+  const { t } = useTranslation();
+  useDocumentTitle(`WeatherApp | ${t('navigation.search')}`);
   const navigate = useNavigate();
   const [query, setQuery] = React.useState('');
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
@@ -88,8 +87,8 @@ export function SearchPage() {
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
-      <section aria-label="Search Locations" className="relative">
-        <h1 className="text-h2 font-display mb-6 text-foreground">Search Locations</h1>
+      <section aria-label={t('emptyStates.searchLocations')} className="relative">
+        <h1 className="text-h2 font-display mb-6 text-foreground">{t('emptyStates.searchLocations')}</h1>
         <SearchBar
           value={query}
           onChange={handleInputChange}
@@ -100,7 +99,7 @@ export function SearchPage() {
             // Delay closing to allow clicks on dropdown items
             setTimeout(() => setIsDropdownOpen(false), 200);
           }}
-          placeholder="Search for a city or airport..."
+          placeholder={t('search.placeholder')}
           role="combobox"
           aria-expanded={isDropdownOpen}
           aria-controls="search-suggestions"
@@ -129,28 +128,28 @@ export function SearchPage() {
       )}
 
       {!selectedLocation && (
-        <section aria-label="Recent Searches" className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <section aria-label={t('search.recentSearches')} className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider">
-              Recent Searches
+              {t('search.recentSearches')}
             </h2>
             {history.length > 0 && (
               <button
                 onClick={() => {
                   clearHistory();
-                  toast.info(TOAST_MESSAGES.HISTORY_CLEARED);
+                  toast.info(t('search.clearHistory'));
                 }}
                 className="text-small text-muted-foreground hover:text-foreground transition-colors"
               >
-                Clear All
+                {t('search.clearHistory')}
               </button>
             )}
           </div>
           
           {history.length === 0 ? (
             <EmptyState 
-              title={EMPTY_STATE_MESSAGES.SEARCH_HISTORY.TITLE} 
-              message={EMPTY_STATE_MESSAGES.SEARCH_HISTORY.MESSAGE} 
+              title={t('emptyStates.noRecentSearches')} 
+              message={t('emptyStates.recentSearchesDesc')} 
             />
           ) : (
             <div className="flex flex-wrap gap-3 mb-8">
@@ -167,10 +166,10 @@ export function SearchPage() {
       )}
 
       {selectedLocation && (
-        <section aria-label="Search Results">
+        <section aria-label={t('search.recentSearches')}>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-small font-medium text-muted-foreground uppercase tracking-wider">
-              Results for "{selectedLocation.name}"
+              {selectedLocation.name}
             </h2>
             <ToggleFavoriteButton 
               location={selectedLocation} 
@@ -185,7 +184,7 @@ export function SearchPage() {
           <div className="flex flex-col gap-4" aria-live="polite" aria-busy={isWeatherLoading}>
             {isWeatherLoading && (
               <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
-                Loading weather data...
+                {t('common.loading')}
               </div>
             )}
             {isWeatherError && !weatherData && (
@@ -194,7 +193,7 @@ export function SearchPage() {
                 isRetrying={isWeatherLoading}
                 onRetry={() => refetchWeather()} 
                 action={{
-                  label: RECOVERY_ACTIONS.CLEAR_SEARCH,
+                  label: t('errors.clearSearch'),
                   onClick: handleClear
                 }}
               />

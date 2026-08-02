@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { GeolocationProvider } from '../../src/context/GeolocationProvider';
 import { ThemeProvider } from '../../src/context/ThemeProvider';
+import { SettingsProvider } from '../../src/context/SettingsContext';
 
 vi.mock('../../src/api/weather.service');
 vi.mock('../../src/services/geolocation.service');
@@ -42,15 +43,17 @@ describe('Loading States Integration', () => {
 
   const renderHome = () => {
     return render(
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <GeolocationProvider>
-            <BrowserRouter>
-              <Home />
-            </BrowserRouter>
-          </GeolocationProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <SettingsProvider>
+        <ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <GeolocationProvider>
+              <BrowserRouter>
+                <Home />
+              </BrowserRouter>
+            </GeolocationProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </SettingsProvider>
     );
   };
 

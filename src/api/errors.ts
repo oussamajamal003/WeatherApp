@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios';
 import type { APIError as APIErrorType } from '../types/api';
-import { ERROR_MESSAGES } from '../constants/error-messages';
+import i18n from '../i18n/config';
 
 /**
  * Base error class for all application errors.
@@ -41,13 +41,13 @@ export class APIError extends AppError {
 }
 
 export class NetworkError extends AppError {
-  constructor(message = ERROR_MESSAGES.NETWORK, details?: unknown) {
+  constructor(message = i18n.t('errors.networkError', 'Unable to connect. Please check your internet connection and try again.'), details?: unknown) {
     super(message, 'NETWORK_ERROR', undefined, details);
   }
 }
 
 export class TimeoutError extends AppError {
-  constructor(message = ERROR_MESSAGES.TIMEOUT, details?: unknown) {
+  constructor(message = 'The request took too long. Please try again later.', details?: unknown) {
     super(message, 'TIMEOUT_ERROR', 408, details);
   }
 }
@@ -65,13 +65,13 @@ export class ConfigurationError extends AppError {
 }
 
 export class GeolocationError extends AppError {
-  constructor(message = 'Geolocation failed.', details?: unknown) {
+  constructor(message = i18n.t('errors.locationError', 'Geolocation failed.'), details?: unknown) {
     super(message, 'GEOLOCATION_ERROR', 400, details);
   }
 }
 
 export class OfflineError extends AppError {
-  constructor(message = ERROR_MESSAGES.OFFLINE, details?: unknown) {
+  constructor(message = i18n.t('emptyStates.offline', 'You are currently offline. Displayed data is cached and live updates are temporarily unavailable.'), details?: unknown) {
     super(message, 'OFFLINE_ERROR', 0, details);
   }
 }
@@ -105,13 +105,13 @@ export class AuthorizationError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(message = ERROR_MESSAGES.NOT_FOUND, details?: unknown) {
+  constructor(message = 'City not found. Try searching for another city.', details?: unknown) {
     super(message, 'NOT_FOUND', 404, details);
   }
 }
 
 export class RateLimitError extends AppError {
-  constructor(message = ERROR_MESSAGES.RATE_LIMIT, details?: unknown) {
+  constructor(message = 'Rate limit exceeded. Please try again later.', details?: unknown) {
     super(message, 'RATE_LIMIT_EXCEEDED', 429, details);
   }
 }
@@ -173,6 +173,6 @@ export function mapApiError(error: unknown): AppError {
   }
 
   // Handle generic non-axios errors
-  const genericMessage = error instanceof Error ? error.message : ERROR_MESSAGES.GENERIC;
+  const genericMessage = error instanceof Error ? error.message : i18n.t('errors.generic', 'An unexpected error occurred. Please try again.');
   return new AppError(genericMessage, 'UNKNOWN_ERROR', undefined, error);
 }

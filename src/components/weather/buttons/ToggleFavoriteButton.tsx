@@ -5,6 +5,7 @@ import { FavoritesService } from '../../../services/favorites.service';
 import type { Location } from '../../../types/weather';
 import { cn } from '../../../utils/cn';
 import { IconButton } from '../../foundation/Button/IconButton';
+import { useTranslation } from 'react-i18next';
 
 interface ToggleFavoriteButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onToggle'> {
   location: Location;
@@ -22,6 +23,7 @@ export function ToggleFavoriteButton({
   const toggleMutation = useToggleFavorite();
   const id = FavoritesService.generateId(location.lat, location.lon);
   const isFavorite = useIsFavorite(id);
+  const { t } = useTranslation();
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,9 +46,9 @@ export function ToggleFavoriteButton({
           : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
         className
       )}
-      aria-label={isFavorite ? `Remove ${location.name} from favorites` : `Add ${location.name} to favorites`}
+      aria-label={isFavorite ? t('favorites.removeName', { name: location.name }) : t('favorites.addName', { name: location.name })}
       aria-pressed={isFavorite}
-      title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+      title={isFavorite ? t('favorites.remove') : t('favorites.add')}
       {...props}
     >
       <Star className={cn(isFavorite && 'fill-current')} />

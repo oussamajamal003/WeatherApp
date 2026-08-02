@@ -7,6 +7,7 @@ import { useCurrentWeather } from '../../../src/api/hooks/use-current-weather';
 import { useForecast } from '../../../src/api/hooks/use-forecast';
 import { WeatherService } from '../../../src/api/weather.service';
 import type { WeatherData } from '../../../src/types/weather';
+import { SettingsProvider } from '../../../src/context/SettingsContext';
 
 // Mock the services
 vi.mock('../../../src/api/weather.service.ts', async (importOriginal) => {
@@ -30,7 +31,9 @@ const createWrapper = () => {
   });
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <SettingsProvider>
+        {children}
+      </SettingsProvider>
     </QueryClientProvider>
   );
   return Wrapper;

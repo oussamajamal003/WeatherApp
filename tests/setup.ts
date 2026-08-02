@@ -18,3 +18,4 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 });
+import '../src/i18n/config';

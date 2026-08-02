@@ -3,6 +3,7 @@ import { SEARCH_CONSTANTS } from '../utils/constants';
 import { cn } from '../../../utils/cn';
 import { MapPin, Loader2 } from 'lucide-react';
 import type { Location } from '../../../types/weather';
+import { useTranslation } from 'react-i18next';
 
 export interface SearchDropdownProps {
   query: string;
@@ -25,6 +26,7 @@ export const SearchDropdown = React.memo(function SearchDropdown({
   onSelect,
   onHover,
 }: SearchDropdownProps) {
+  const { t } = useTranslation();
 
   if (!isOpen || query.trim().length < SEARCH_CONSTANTS.MIN_SEARCH_LENGTH) {
     return null;
@@ -42,19 +44,19 @@ export const SearchDropdown = React.memo(function SearchDropdown({
       {isLoading && (
         <div className="flex items-center justify-center py-6 text-muted-foreground">
           <Loader2 className="w-5 h-5 animate-spin mr-2" />
-          <span className="text-small">Searching...</span>
+          <span className="text-small">{t('search.searching')}</span>
         </div>
       )}
 
       {isError && (
         <div className="px-4 py-3 text-small text-destructive">
-          Failed to load suggestions. Please try again.
+          {t('search.failedSuggestions')}
         </div>
       )}
 
       {!isLoading && !isError && suggestions?.length === 0 && (
         <div className="px-4 py-3 text-small text-muted-foreground">
-          No locations found for "{query}"
+          {t('search.noLocationsFound', { query })}
         </div>
       )}
 
