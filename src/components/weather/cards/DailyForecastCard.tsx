@@ -8,7 +8,7 @@ export interface DailyForecastCardProps extends React.HTMLAttributes<HTMLDivElem
   isToday?: boolean;
 }
 
-export const DailyForecastCard = React.forwardRef<HTMLDivElement, DailyForecastCardProps>(
+export const DailyForecastCard = React.memo(React.forwardRef<HTMLDivElement, DailyForecastCardProps>(
   ({ data, isToday, className, ...props }, ref) => {
     return (
       <div 
@@ -47,6 +47,6 @@ export const DailyForecastCard = React.forwardRef<HTMLDivElement, DailyForecastC
       </div>
     );
   }
-);
+));
 
 DailyForecastCard.displayName = 'DailyForecastCard';

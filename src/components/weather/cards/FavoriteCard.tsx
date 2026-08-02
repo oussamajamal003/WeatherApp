@@ -13,7 +13,7 @@ export interface FavoriteCardProps extends Omit<React.HTMLAttributes<HTMLDivElem
   onSelect?: (favorite: FavoriteLocation) => void;
 }
 
-export const FavoriteCard = React.forwardRef<HTMLDivElement, FavoriteCardProps>(
+export const FavoriteCard = React.memo(React.forwardRef<HTMLDivElement, FavoriteCardProps>(
   ({ favorite, onSelect, className, ...props }, ref) => {
     
     // Automatically fetch and maintain fresh weather data for this favorite!
@@ -93,6 +93,6 @@ export const FavoriteCard = React.forwardRef<HTMLDivElement, FavoriteCardProps>(
       </Card>
     );
   }
-);
+));
 
 FavoriteCard.displayName = 'FavoriteCard';

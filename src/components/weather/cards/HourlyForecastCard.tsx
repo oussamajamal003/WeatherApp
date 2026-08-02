@@ -8,7 +8,7 @@ export interface HourlyForecastCardProps extends React.HTMLAttributes<HTMLDivEle
   data: HourlyForecastData;
 }
 
-export const HourlyForecastCard = React.forwardRef<HTMLDivElement, HourlyForecastCardProps>(
+export const HourlyForecastCard = React.memo(React.forwardRef<HTMLDivElement, HourlyForecastCardProps>(
   ({ data, className, ...props }, ref) => {
     return (
       <div 
@@ -35,6 +35,6 @@ export const HourlyForecastCard = React.forwardRef<HTMLDivElement, HourlyForecas
       </div>
     );
   }
-);
+));
 
 HourlyForecastCard.displayName = 'HourlyForecastCard';

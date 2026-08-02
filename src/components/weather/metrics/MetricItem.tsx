@@ -12,7 +12,7 @@ export interface MetricItemProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export function MetricItem({ 
+export const MetricItem = React.memo(function MetricItem({ 
   icon: Icon, 
   label, 
   value, 
@@ -74,4 +74,4 @@ export function MetricItem({
       )}
     </div>
   );
-}
+});
