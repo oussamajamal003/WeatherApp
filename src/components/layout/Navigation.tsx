@@ -12,7 +12,7 @@ export function Navigation() {
   return (
     <>
       {/* Tablet (Nav Rail) & Desktop (Full Sidebar) */}
-      <nav className="hidden md:flex flex-col sticky top-0 h-screen border-r border-border-subtle bg-surface z-40 shrink-0 md:w-[72px] lg:w-[240px] transition-all duration-300">
+      <nav className="hidden md:flex flex-col sticky top-0 h-screen border-r border-border-subtle bg-surface z-40 shrink-0 md:w-[72px] lg:w-[240px] transition-all duration-300 box-content pl-[env(safe-area-inset-left)]">
         <div className="flex-1 overflow-y-auto py-12 flex flex-col gap-4 px-6 lg:px-8">
           {navItems.map((item) => (
             <NavLink
