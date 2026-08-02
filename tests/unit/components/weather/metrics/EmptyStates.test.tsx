@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { AirQuality } from '../../../../../src/components/weather/metrics/AirQuality';
-import { UVIndex } from '../../../../../src/components/weather/metrics/UvIndex';
+import { UVIndex } from '../../../../../src/components/weather/metrics/UVIndex';
 
 describe('Metric Components Empty States', () => {
   it('renders "N/A" gracefully for AirQuality when value is missing', () => {
