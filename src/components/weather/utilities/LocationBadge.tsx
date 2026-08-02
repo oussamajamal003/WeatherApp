@@ -8,7 +8,7 @@ export interface LocationBadgeProps extends React.ComponentProps<typeof Badge> {
   isCurrentLocation?: boolean;
 }
 
-export function LocationBadge({ 
+export const LocationBadge = React.memo(function LocationBadge({ 
   location, 
   isCurrentLocation = false, 
   className,
@@ -28,4 +28,4 @@ export function LocationBadge({
       )}
     </Badge>
   );
-}
+});

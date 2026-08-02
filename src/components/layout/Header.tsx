@@ -1,10 +1,11 @@
+import React from 'react';
 import { Search, MapPin } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGeolocation } from '../../hooks/use-geolocation';
 import { useClearActiveLocation } from '../../hooks/use-active-location';
 import { IconButton } from '../foundation/Button/IconButton';
 
-export function Header() {
+export const Header = React.memo(function Header() {
   const { requestLocation } = useGeolocation();
   const navigate = useNavigate();
   const clearActiveLocation = useClearActiveLocation();
@@ -46,4 +47,4 @@ export function Header() {
       </div>
     </header>
   );
-}
+});

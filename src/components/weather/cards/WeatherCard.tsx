@@ -20,7 +20,7 @@ export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 
-export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
+export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCardProps>(
   ({ data, isLoading, error, size = 'md', variant = 'glass', selected = false, theme, elevation = 2, className, ...props }, ref) => {
     
     // Map size to padding/radius
@@ -104,6 +104,6 @@ export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
       </Card>
     );
   }
-);
+));
 
 WeatherCard.displayName = 'WeatherCard';

@@ -1,5 +1,4 @@
-
-
+import React from 'react';
 import { SEARCH_CONSTANTS } from '../utils/constants';
 import { cn } from '../../../utils/cn';
 import { MapPin, Loader2 } from 'lucide-react';
@@ -16,7 +15,7 @@ export interface SearchDropdownProps {
   onHover: (index: number) => void;
 }
 
-export function SearchDropdown({
+export const SearchDropdown = React.memo(function SearchDropdown({
   query,
   isOpen,
   focusedIndex,
@@ -93,4 +92,4 @@ export function SearchDropdown({
       )}
     </div>
   );
-}
+});

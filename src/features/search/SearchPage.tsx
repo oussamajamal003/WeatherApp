@@ -37,22 +37,22 @@ export function SearchPage() {
     { enabled: !!selectedLocation }
   );
 
-  const handleInputChange = (value: string) => {
+  const handleInputChange = React.useCallback((value: string) => {
     setQuery(value);
     setIsDropdownOpen(true);
     setFocusedIndex(-1);
     if (value.trim().length === 0) {
       setSelectedLocation(null);
     }
-  };
+  }, []);
 
-  const handleSelectLocation = (location: Location) => {
+  const handleSelectLocation = React.useCallback((location: Location) => {
     setQuery(location.name);
     setIsDropdownOpen(false);
     setSelectedLocation(location);
     addSearch(location);
     setActiveLocation.mutate(location);
-  };
+  }, [addSearch, setActiveLocation]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isDropdownOpen || !suggestions || suggestions.length === 0) return;
@@ -74,11 +74,11 @@ export function SearchPage() {
     }
   };
 
-  const handleClear = () => {
+  const handleClear = React.useCallback(() => {
     setQuery('');
     setSelectedLocation(null);
     setIsDropdownOpen(false);
-  };
+  }, []);
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
