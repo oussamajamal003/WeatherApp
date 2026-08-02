@@ -24,13 +24,13 @@ export function SearchPage() {
   const setActiveLocation = useSetActiveLocation();
 
   const isGeocodingEnabled = isDropdownOpen && debouncedQuery.trim().length >= SEARCH_CONSTANTS.MIN_SEARCH_LENGTH;
-  const { data: suggestions, isLoading: isGeocodingLoading, isError: isGeocodingError } = useDirectGeocoding(
+  const { data: suggestions, isPending: isGeocodingLoading, isError: isGeocodingError } = useDirectGeocoding(
     debouncedQuery,
     5,
     { enabled: isGeocodingEnabled }
   );
 
-  const { data: weatherData, isLoading: isWeatherLoading, isError: isWeatherError, error: weatherError, refetch: refetchWeather } = useCurrentWeather(
+  const { data: weatherData, isPending: isWeatherLoading, isError: isWeatherError, error: weatherError, refetch: refetchWeather } = useCurrentWeather(
     { lat: selectedLocation?.lat ?? 0, lon: selectedLocation?.lon ?? 0 },
     { enabled: !!selectedLocation }
   );

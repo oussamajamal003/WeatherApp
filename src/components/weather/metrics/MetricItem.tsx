@@ -1,11 +1,13 @@
 import * as React from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '../../../utils/cn';
+import { Skeleton } from '../../foundation/Skeleton/Skeleton';
 
 export interface MetricItemProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: LucideIcon;
   label: string;
-  value: React.ReactNode;
+  value?: React.ReactNode;
+  isLoading?: boolean;
   orientation?: 'horizontal' | 'vertical';
   size?: 'sm' | 'md' | 'lg';
 }
@@ -14,6 +16,7 @@ export function MetricItem({
   icon: Icon, 
   label, 
   value, 
+  isLoading = false,
   orientation = 'vertical',
   size = 'md',
   className,
@@ -62,9 +65,13 @@ export function MetricItem({
         <Icon className={currentSize.icon} aria-hidden="true" />
         <span className={currentSize.label}>{label}</span>
       </div>
-      <span className={cn('text-foreground font-medium', currentSize.value)}>
-        {value}
-      </span>
+      {isLoading ? (
+        <Skeleton className={cn('rounded-md', isHorizontal ? 'h-5 w-12' : 'h-7 w-16')} />
+      ) : (
+        <span className={cn('text-foreground font-medium', currentSize.value)}>
+          {value !== undefined && value !== null ? value : 'N/A'}
+        </span>
+      )}
     </div>
   );
 }

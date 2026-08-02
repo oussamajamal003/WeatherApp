@@ -33,7 +33,15 @@ export function setupInterceptors(axiosInstance: AxiosInstance): AxiosInstance {
 
   // Response Interceptor
   axiosInstance.interceptors.response.use(
-    (response: AxiosResponse) => {
+    async (response: AxiosResponse) => {
+      // Artificial delay for development skeleton testing
+      if (import.meta.env.DEV) {
+        const debugDelay = Number(import.meta.env.VITE_DEBUG_SKELETON_DELAY);
+        if (!isNaN(debugDelay) && debugDelay > 0) {
+          await new Promise((resolve) => setTimeout(resolve, debugDelay));
+        }
+      }
+
       // Return the raw response - Services will parse this into APIResponse<T>
       return response;
     },

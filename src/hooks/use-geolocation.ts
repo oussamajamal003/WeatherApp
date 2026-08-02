@@ -1,6 +1,5 @@
 import { useContext } from 'react';
-import { GeolocationContext } from '../context/GeolocationProvider';
-import type { GeolocationContextValue } from '../context/GeolocationProvider';
+import { GeolocationContext, type GeolocationContextValue } from '../context/GeolocationContext';
 
 export function useGeolocation(): GeolocationContextValue {
   const context = useContext(GeolocationContext);

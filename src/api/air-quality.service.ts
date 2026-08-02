@@ -4,6 +4,7 @@ import { mapApiError, ValidationError } from './errors';
 import { parseApiResponse } from '../utils/api';
 import { API_ENDPOINTS } from './endpoints';
 import type { OpenWeatherAirPollutionResponse } from './models';
+import { mapAirQualityResponse } from '../mappers/air-quality.mapper';
 
 /**
  * Service responsible for fetching Air Quality Index data.
@@ -30,8 +31,7 @@ export const AirQualityService = {
       
       const apiResponse = parseApiResponse(response);
       
-      // Default to 1 (Good) if not available, though OpenWeather always returns a list
-      return apiResponse.data.list[0]?.main?.aqi ?? 1;
+      return mapAirQualityResponse(apiResponse.data);
     } catch (error) {
       throw mapApiError(error);
     }
