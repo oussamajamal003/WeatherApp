@@ -60,18 +60,18 @@ describe('Loading States Integration', () => {
     vi.mocked(GeolocationService.getCurrentPosition).mockResolvedValue({ lat: 51.5, lon: -0.1 });
 
     // 2. Mock WeatherService with a delayed Promise to simulate slow network
-    let resolveWeather: (value: any) => void;
+    let resolveWeather: (value: unknown) => void;
     const weatherPromise = new Promise((resolve) => {
       resolveWeather = resolve;
     });
 
-    let resolveForecast: (value: any) => void;
+    let resolveForecast: (value: unknown) => void;
     const forecastPromise = new Promise((resolve) => {
       resolveForecast = resolve;
     });
 
-    vi.mocked(WeatherService.getCurrentWeather).mockReturnValue(weatherPromise as any);
-    vi.mocked(WeatherService.getForecast).mockReturnValue(forecastPromise as any);
+    vi.mocked(WeatherService.getCurrentWeather).mockReturnValue(weatherPromise as ReturnType<typeof WeatherService.getCurrentWeather>);
+    vi.mocked(WeatherService.getForecast).mockReturnValue(forecastPromise as ReturnType<typeof WeatherService.getForecast>);
 
     renderHome();
 
