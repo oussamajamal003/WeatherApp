@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { useFavorites } from '../../hooks/use-favorites';
 import { FavoriteCard } from '../../components/weather/cards/FavoriteCard';
+import { EmptyState } from '../../components/feedback/EmptyState';
+import { useNavigate } from 'react-router-dom';
 import type { FavoriteLocation } from '../../types/favorites';
 import { cn } from '../../utils/cn';
+import { EMPTY_STATE_MESSAGES } from '../../constants/empty-state-messages';
 
 interface FavoritesSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelectFavorite?: (favorite: FavoriteLocation) => void;
@@ -16,9 +19,19 @@ export function FavoritesSection({
   ...props 
 }: FavoritesSectionProps) {
   const { data: favorites = [], isLoading } = useFavorites();
+  const navigate = useNavigate();
 
   if (!isLoading && favorites.length === 0) {
-    return null;
+    return (
+      <EmptyState 
+        title={EMPTY_STATE_MESSAGES.FAVORITES.TITLE}
+        message={EMPTY_STATE_MESSAGES.FAVORITES.MESSAGE}
+        action={{
+          label: EMPTY_STATE_MESSAGES.FAVORITES.ACTION,
+          onClick: () => navigate('/search')
+        }}
+      />
+    );
   }
 
   return (

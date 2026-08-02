@@ -6,6 +6,18 @@ import { storage } from '../../../src/utils/storage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import type { Location } from '../../../src/types/weather';
+import { vi } from 'vitest';
+
+vi.mock('../../../src/hooks/useToast', () => ({
+  useToast: () => ({
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    }
+  })
+}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({

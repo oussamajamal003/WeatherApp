@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeProvider';
 import { GeolocationProvider } from './context/GeolocationProvider';
 import { AppShell } from './components/layout/AppShell';
 import { ErrorBoundary } from './components/feedback/ErrorBoundary';
+import { ToastProvider } from './components/toast/ToastProvider';
 
 import { lazy, Suspense } from 'react';
 import { RouteLoader } from './components/layout/RouteLoader';
@@ -19,8 +20,9 @@ function App() {
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <GeolocationProvider>
-          <BrowserRouter>
-            <ErrorBoundary>
+          <ToastProvider>
+            <BrowserRouter>
+              <ErrorBoundary>
               <AppShell>
                   <Suspense fallback={<RouteLoader />}>
                     <Routes>
@@ -30,9 +32,10 @@ function App() {
                       <Route path="/about" element={<About />} />
                     </Routes>
                   </Suspense>
-              </AppShell>
-            </ErrorBoundary>
-          </BrowserRouter>
+                </AppShell>
+              </ErrorBoundary>
+            </BrowserRouter>
+          </ToastProvider>
         </GeolocationProvider>
       </QueryClientProvider>
     </ThemeProvider>

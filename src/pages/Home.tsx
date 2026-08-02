@@ -26,6 +26,7 @@ import { useForecast } from '../api/hooks/use-forecast';
 import { MapPin, Loader2 } from 'lucide-react';
 import type { Coordinates } from '../types/geolocation';
 import { useDocumentTitle } from '../hooks/use-document-title';
+import { EMPTY_STATE_MESSAGES } from '../constants/empty-state-messages';
 
 function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
   const { data: currentWeather, isPending: isWeatherLoading, error: weatherError } = useCurrentWeather({
@@ -242,9 +243,9 @@ export function Home() {
         </div>
         
         <div className="flex flex-col gap-2 max-w-md">
-          <h1 className="text-h3 font-display">Local Weather</h1>
+          <h1 className="text-h3 font-display">{EMPTY_STATE_MESSAGES.FIRST_LAUNCH.TITLE}</h1>
           <p className="text-body text-muted-foreground">
-            WeatherApp uses your location to provide accurate, real-time weather forecasts for your area.
+            {EMPTY_STATE_MESSAGES.FIRST_LAUNCH.MESSAGE}
           </p>
         </div>
   
@@ -253,7 +254,7 @@ export function Home() {
             onClick={requestLocation}
             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6 py-3 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Use My Location
+            {EMPTY_STATE_MESSAGES.FIRST_LAUNCH.ACTION_LOCATION}
           </button>
           
           <span className="text-sm text-muted-foreground uppercase tracking-wider">or</span>
@@ -262,7 +263,7 @@ export function Home() {
             to="/search"
             className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium px-6 py-3 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring text-center"
           >
-            Search Manually
+            {EMPTY_STATE_MESSAGES.FIRST_LAUNCH.ACTION_SEARCH}
           </Link>
         </div>
       </div>

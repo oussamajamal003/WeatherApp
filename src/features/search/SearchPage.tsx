@@ -9,9 +9,14 @@ import { useDirectGeocoding } from '../../api/hooks/use-geocoding';
 import { useCurrentWeather } from '../../api/hooks/use-current-weather';
 import { useSetActiveLocation } from '../../hooks/use-active-location';
 import { FavoritesSection } from '../favorites';
+import { EmptyState } from '../../components/feedback/EmptyState';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import type { Location } from '../../types/weather';
 import { useDocumentTitle } from '../../hooks/use-document-title';
+import { useToast } from '../../hooks/useToast';
+import { EMPTY_STATE_MESSAGES } from '../../constants/empty-state-messages';
+import { TOAST_MESSAGES } from '../../constants/toast-messages';
+import { RECOVERY_ACTIONS } from '../../constants/error-messages';
 
 export function SearchPage() {
   useDocumentTitle('WeatherApp | Search');
@@ -24,6 +29,7 @@ export function SearchPage() {
   const debouncedQuery = useDebounce(query, SEARCH_CONSTANTS.DEBOUNCE_MS);
   const { history, addSearch, clearHistory } = useSearchHistory();
   const setActiveLocation = useSetActiveLocation();
+  const { toast } = useToast();
 
   const isGeocodingEnabled = isDropdownOpen && debouncedQuery.trim().length >= SEARCH_CONSTANTS.MIN_SEARCH_LENGTH;
   const { data: suggestions, isPending: isGeocodingLoading, isError: isGeocodingError } = useDirectGeocoding(
@@ -130,7 +136,10 @@ export function SearchPage() {
             </h2>
             {history.length > 0 && (
               <button
-                onClick={clearHistory}
+                onClick={() => {
+                  clearHistory();
+                  toast.info(TOAST_MESSAGES.HISTORY_CLEARED);
+                }}
                 className="text-small text-muted-foreground hover:text-foreground transition-colors"
               >
                 Clear All
@@ -139,7 +148,10 @@ export function SearchPage() {
           </div>
           
           {history.length === 0 ? (
-            <p className="text-body text-muted-foreground">No recent searches.</p>
+            <EmptyState 
+              title={EMPTY_STATE_MESSAGES.SEARCH_HISTORY.TITLE} 
+              message={EMPTY_STATE_MESSAGES.SEARCH_HISTORY.MESSAGE} 
+            />
           ) : (
             <div className="flex flex-wrap gap-3 mb-8">
               {history.map((item) => (
@@ -179,7 +191,12 @@ export function SearchPage() {
             {isWeatherError && !weatherData && (
               <ErrorState 
                 error={weatherError} 
+                isRetrying={isWeatherLoading}
                 onRetry={() => refetchWeather()} 
+                action={{
+                  label: RECOVERY_ACTIONS.CLEAR_SEARCH,
+                  onClick: handleClear
+                }}
               />
             )}
             {weatherData && (

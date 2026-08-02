@@ -2,19 +2,25 @@ import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '../foundation/Button/Button';
 import { AppError } from '../../api/errors';
 import { cn } from '../../utils/cn';
+import { ERROR_MESSAGES, RECOVERY_ACTIONS } from '../../constants/error-messages';
 
 interface ErrorStateProps {
   error: Error | AppError | null;
   onRetry?: () => void;
+  isRetrying?: boolean;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
   className?: string;
   title?: string;
 }
 
-export function ErrorState({ error, onRetry, className, title }: ErrorStateProps) {
+export function ErrorState({ error, onRetry, isRetrying, action, className, title }: ErrorStateProps) {
   const errorMessage =
     error instanceof AppError
       ? error.message
-      : error?.message || 'An unexpected error occurred. Please try again.';
+      : error?.message || ERROR_MESSAGES.GENERIC;
 
   return (
     <div
@@ -30,17 +36,24 @@ export function ErrorState({ error, onRetry, className, title }: ErrorStateProps
       
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-semibold text-text">
-          {title || 'Unable to Load Data'}
+          {title || ERROR_MESSAGES.UNABLE_TO_LOAD}
         </h3>
         <p className="text-sm text-muted-foreground">{errorMessage}</p>
       </div>
 
-      {onRetry && (
-        <Button onClick={onRetry} variant="outline" className="mt-2" size="sm">
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Retry
-        </Button>
-      )}
+      <div className="flex gap-3 mt-2">
+        {onRetry && (
+          <Button onClick={onRetry} variant="outline" size="sm" disabled={isRetrying}>
+            <RefreshCw className={cn('w-4 h-4 mr-2', isRetrying && 'animate-spin')} />
+            {isRetrying ? RECOVERY_ACTIONS.RETRYING : RECOVERY_ACTIONS.RETRY}
+          </Button>
+        )}
+        {action && (
+          <Button onClick={action.onClick} variant="primary" size="sm">
+            {action.label}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
