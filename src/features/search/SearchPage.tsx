@@ -79,7 +79,7 @@ export function SearchPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8">
+    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       <section aria-label="Search Locations" className="relative">
         <h1 className="text-h2 font-display mb-6 text-foreground">Search Locations</h1>
         <SearchBar

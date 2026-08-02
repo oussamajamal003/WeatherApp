@@ -62,7 +62,7 @@ export const WeatherCard = React.forwardRef<HTMLDivElement, WeatherCardProps>(
         isSelected={selected}
         interactive
         className={cn(
-          'flex flex-col justify-between',
+          'flex flex-col justify-between animate-in fade-in duration-500',
           size === 'sm' ? 'min-w-[160px]' : 'min-w-[260px]',
           theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : '',
           elevation > 0 && elevationClass,

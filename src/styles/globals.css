@@ -343,7 +343,7 @@
   }
 
   body {
-    @apply bg-background text-text font-sans antialiased;
+    @apply bg-background text-text font-sans antialiased transition-colors duration-200;
   }
 }
 
@@ -429,4 +429,28 @@
   font-size: 11px;
   font-weight: 600;
   line-height: 1.0;
+}
+
+@utility animate-in {
+  animation-duration: 300ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+@utility fade-in {
+  animation-name: fadeIn;
+}
+
+@utility fade-out {
+  animation-name: fadeOut;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

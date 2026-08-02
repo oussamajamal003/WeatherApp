@@ -4,7 +4,7 @@ import { Code, MessageCircle, Globe, Heart } from 'lucide-react';
 
 export function About() {
   return (
-    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8">
+    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       <section aria-label="About WeatherApp">
         
         <div className="flex flex-col items-center text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
