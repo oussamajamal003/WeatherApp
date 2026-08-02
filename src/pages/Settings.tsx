@@ -3,9 +3,11 @@ import { Button } from '../components/foundation/Button/Button';
 import { useTheme } from '../hooks/useTheme';
 import { Moon, Sun, Monitor, Thermometer, Bell } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useDocumentTitle } from '../hooks/use-document-title';
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
+  useDocumentTitle('WeatherApp | Settings');
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
@@ -32,30 +34,33 @@ export function Settings() {
                 <div className="flex bg-surface-hover p-1 rounded-lg border border-border/50 w-full sm:w-auto">
                   <button 
                     onClick={() => setTheme('light')}
+                    aria-pressed={theme === 'light'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',
                       theme === 'light' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
-                    <Sun className="w-4 h-4" /> Light
+                    <Sun aria-hidden="true" className="w-4 h-4" /> Light
                   </button>
                   <button 
                     onClick={() => setTheme('dark')}
+                    aria-pressed={theme === 'dark'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',
                       theme === 'dark' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
-                    <Moon className="w-4 h-4" /> Dark
+                    <Moon aria-hidden="true" className="w-4 h-4" /> Dark
                   </button>
                   <button 
                     onClick={() => setTheme('system')}
+                    aria-pressed={theme === 'system'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',
                       theme === 'system' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
-                    <Monitor className="w-4 h-4" /> System
+                    <Monitor aria-hidden="true" className="w-4 h-4" /> System
                   </button>
                 </div>
               </div>

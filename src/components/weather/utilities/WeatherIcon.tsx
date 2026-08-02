@@ -24,7 +24,7 @@ export function WeatherIcon({ condition, size = 'md', className, ...props }: Wea
     partlyCloudy: 'text-amber-500/80',
     cloudy: 'text-muted',
     overcast: 'text-muted',
-    rain: 'text-blue-500',
+    rain: 'text-blue-600 dark:text-blue-400',
     drizzle: 'text-blue-400',
     thunderstorm: 'text-purple-500',
     snow: 'text-blue-200',

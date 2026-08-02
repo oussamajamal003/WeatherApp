@@ -1,15 +1,17 @@
 import { Card, CardContent } from '../components/foundation/Card/Card';
 import { Button } from '../components/foundation/Button/Button';
 import { Code, MessageCircle, Globe, Heart } from 'lucide-react';
+import { useDocumentTitle } from '../hooks/use-document-title';
 
 export function About() {
+  useDocumentTitle('WeatherApp | About');
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       <section aria-label="About WeatherApp">
         
         <div className="flex flex-col items-center text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-3xl shadow-lg flex items-center justify-center mb-6">
-             <CloudIcon className="w-12 h-12 text-white" />
+             <CloudIcon aria-hidden="true" className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-displayM font-display text-foreground mb-2">WeatherApp</h1>
           <p className="text-body text-muted-foreground max-w-md">
@@ -43,13 +45,13 @@ export function About() {
                 
                 <div className="flex flex-wrap gap-4">
                   <Button variant="outline" className="gap-2">
-                    <Code className="w-4 h-4" /> GitHub Repository
+                    <Code aria-hidden="true" className="w-4 h-4" /> GitHub Repository
                   </Button>
                   <Button variant="outline" className="gap-2">
-                    <MessageCircle className="w-4 h-4" /> Follow Updates
+                    <MessageCircle aria-hidden="true" className="w-4 h-4" /> Follow Updates
                   </Button>
                   <Button variant="outline" className="gap-2">
-                    <Globe className="w-4 h-4" /> Portfolio
+                    <Globe aria-hidden="true" className="w-4 h-4" /> Portfolio
                   </Button>
                 </div>
               </div>

@@ -9,7 +9,7 @@ const cardVariants = cva(
       variant: {
         default: 'bg-surface shadow-sm border border-transparent',
         elevated: 'bg-surface shadow-md border border-border/50',
-        glass: 'bg-white/10 dark:bg-black/20 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-sm',
+        glass: 'bg-white/40 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-sm',
         outlined: 'bg-transparent border border-border',
       },
       padding: {
@@ -23,7 +23,7 @@ const cardVariants = cva(
         hero: 'rounded-2xl', // 24px
       },
       interactive: {
-        true: 'cursor-pointer hover:scale-[1.02] hover:shadow-md active:scale-[0.98] motion-reduce:transform-none hover:border-primary/50 aria-selected:border-primary aria-selected:ring-1 aria-selected:ring-primary',
+        true: 'cursor-pointer hover:scale-[1.02] hover:shadow-md active:scale-[0.98] motion-reduce:transform-none hover:border-primary/50 aria-pressed:border-primary aria-pressed:ring-1 aria-pressed:ring-primary',
         false: '',
       },
     },
@@ -53,7 +53,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         role={isClickable ? 'button' : undefined}
         tabIndex={isClickable && !isDisabled ? 0 : undefined}
         aria-disabled={isDisabled}
-        aria-selected={isSelected}
+        aria-pressed={isClickable ? isSelected : undefined}
         className={cn(cardVariants({ variant, padding, radius, interactive: !!isClickable, className }))}
         {...props}
       />

@@ -12,6 +12,12 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   return (
     <div className="flex min-h-screen bg-background text-text font-sans antialiased">
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] bg-primary text-primary-foreground px-4 py-2 rounded-md font-medium shadow-md outline-none ring-2 ring-primary ring-offset-2 ring-offset-background"
+      >
+        Skip to main content
+      </a>
       <Navigation />
       
       <div className="flex-1 flex flex-col min-w-0 pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left,0px)] md:pl-0">

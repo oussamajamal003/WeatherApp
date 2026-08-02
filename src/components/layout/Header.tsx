@@ -29,14 +29,15 @@ export function Header() {
             aria-label="Use my current location"
             title="Use my current location"
           >
-            <MapPin />
+            <MapPin aria-hidden="true" />
           </IconButton>
 
           {/* Placeholder for global search on Tablet/Desktop */}
           <div className="hidden md:flex items-center bg-background rounded-full px-6 py-2.5 border border-border focus-within:border-primary transition-colors min-w-[200px] max-w-[300px] w-full">
-            <Search className="w-5 h-5 text-muted mr-3 shrink-0" />
+            <Search aria-hidden="true" className="w-5 h-5 text-muted mr-3 shrink-0" />
             <input 
-              type="text" 
+              type="search" 
+              aria-label="Search location globally"
               placeholder="Search location..." 
               className="bg-transparent border-none outline-none text-text text-body w-full placeholder:text-muted"
             />

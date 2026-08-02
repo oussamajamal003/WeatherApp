@@ -23,7 +23,7 @@ export const HourlyForecastCard = React.forwardRef<HTMLDivElement, HourlyForecas
         <div className="flex flex-col items-center gap-1">
           <WeatherIcon condition={data.condition} size="md" />
           {data.precipitationProbability > 0 && (
-            <span className="text-caption font-medium text-blue-500">
+            <span className="text-caption font-medium text-blue-600 dark:text-blue-400">
               {data.precipitationProbability}%
             </span>
           )}

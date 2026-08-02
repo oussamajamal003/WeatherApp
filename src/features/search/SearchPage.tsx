@@ -11,8 +11,10 @@ import { useSetActiveLocation } from '../../hooks/use-active-location';
 import { FavoritesSection } from '../favorites';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import type { Location } from '../../types/weather';
+import { useDocumentTitle } from '../../hooks/use-document-title';
 
 export function SearchPage() {
+  useDocumentTitle('WeatherApp | Search');
   const navigate = useNavigate();
   const [query, setQuery] = React.useState('');
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
@@ -168,7 +170,7 @@ export function SearchPage() {
               }}
             />
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4" aria-live="polite" aria-busy={isWeatherLoading}>
             {isWeatherLoading && (
               <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
                 Loading weather data...
