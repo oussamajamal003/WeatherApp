@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from 'react';
 import { ToastContainer } from './ToastContainer';
 import type { ToastMessage, ToastAPI, ToastType } from '../../types/toast';

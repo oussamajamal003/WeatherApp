@@ -6,7 +6,9 @@ import type { WeatherData } from '../../../types/weather';
 import { cn } from '../../../utils/cn';
 import { LoadingWeatherCard } from '../status/LoadingWeatherCard';
 import { ErrorWeatherCard } from '../status/ErrorWeatherCard';
-import { formatDate } from '../../../utils/formatters/weather';
+import { formatDate, formatTemperature } from '../../../utils/formatters/weather';
+import { useSettings } from '../../../hooks/use-settings';
+import { useTranslation } from 'react-i18next';
 
 export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
   data?: WeatherData;
@@ -19,10 +21,11 @@ export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
   elevation?: 0 | 1 | 2 | 3;
 }
 
-
 export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCardProps>(
   ({ data, isLoading, error, size = 'md', variant = 'glass', selected = false, theme, elevation = 2, className, ...props }, ref) => {
-    
+    const { settings } = useSettings();
+    const { t } = useTranslation();
+
     // Map size to padding/radius
     const paddingMap = {
       sm: 'compact',
@@ -75,7 +78,7 @@ export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCa
             <div className="flex flex-col gap-1">
               <span className="text-small font-medium text-foreground">{data.locationName}</span>
               {size !== 'sm' && (
-                <span className="text-caption text-subtle">Updated {formatDate(data.updatedAt)}</span>
+                <span className="text-caption text-subtle">{t('common.updatedAt')} {formatDate(data.updatedAt)}</span>
               )}
             </div>
             <WeatherIcon condition={data.condition} size={size === 'sm' ? 'sm' : 'md'} />
@@ -88,12 +91,12 @@ export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCa
               className="text-displayL" // override default size for big display
               label="" // hide label for the main temp display
             />
-            <span className="text-body text-foreground">{data.description}</span>
+            <span className="text-body text-foreground capitalize">{data.description}</span>
             
             {size !== 'sm' && (
               <div className="flex items-center gap-4 mt-4 text-caption text-subtle">
-                <span>H: {Math.round(data.temperature + 4)}°</span>
-                <span>L: {Math.round(data.temperature - 6)}°</span>
+                <span>{t('weather.high')}: {formatTemperature(data.temperature + 4, settings.temperatureUnit, false)}</span>
+                <span>{t('weather.low')}: {formatTemperature(data.temperature - 6, settings.temperatureUnit, false)}</span>
                 {data.humidity !== undefined && (
                 <span className="ml-auto text-blue-600 dark:text-blue-400 font-medium">💧 {data.humidity}%</span>
               )}

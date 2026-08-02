@@ -1,8 +1,9 @@
-
 import { METRIC_ICONS } from '../../../constants/weather-icons';
 import { MetricItem, type MetricItemProps } from './MetricItem';
 
 import { formatPressure } from '../../../utils/formatters/weather';
+import { useSettings } from '../../../hooks/use-settings';
+import { useTranslation } from 'react-i18next';
 
 export interface PressureProps extends Omit<MetricItemProps, 'icon' | 'label' | 'value'> {
   value?: number;
@@ -10,13 +11,14 @@ export interface PressureProps extends Omit<MetricItemProps, 'icon' | 'label' | 
 }
 
 export function Pressure({ value, isLoading, ...props }: PressureProps) {
-  // Format pressure using formatter, but keep unit prop if needed, or rely on formatter
-  // The formatter defaults to hPa but we can just use the formatter if it's there
+  const { settings } = useSettings();
+  const { t } = useTranslation();
+  
   return (
     <MetricItem
       icon={METRIC_ICONS.pressure}
-      label="Pressure"
-      value={value !== undefined ? formatPressure(value) : undefined}
+      label={t('weather.pressure')}
+      value={value !== undefined ? formatPressure(value, settings.pressureUnit) : undefined}
       isLoading={isLoading}
       {...props}
     />

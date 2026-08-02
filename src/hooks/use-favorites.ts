@@ -4,7 +4,7 @@ import type { Location } from '../types/weather';
 import type { FavoriteLocation } from '../types/favorites';
 import { useEffect } from 'react';
 import { useToast } from './useToast';
-import { TOAST_MESSAGES } from '../constants/toast-messages';
+import { useTranslation } from 'react-i18next';
 
 const FAVORITES_QUERY_KEY = ['favorites'];
 
@@ -49,6 +49,7 @@ export function useIsFavorite(id: string): boolean {
 export function useToggleFavorite() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (location: Location) => {
@@ -87,9 +88,9 @@ export function useToggleFavorite() {
       const id = FavoritesService.generateId(location.lat, location.lon);
       const isFav = FavoritesService.isFavorite(id);
       if (isFav) {
-        toast.success(TOAST_MESSAGES.FAVORITE_ADDED(location.name));
+        toast.success(t('toasts.addedFavorite', { name: location.name }));
       } else {
-        toast.success(TOAST_MESSAGES.FAVORITE_REMOVED(location.name));
+        toast.success(t('toasts.removedFavorite', { name: location.name }));
       }
     }
   });

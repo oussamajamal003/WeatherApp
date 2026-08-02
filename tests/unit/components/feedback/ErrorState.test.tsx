@@ -8,7 +8,7 @@ describe('ErrorState', () => {
     const error = new Error('Standard Error');
     render(<ErrorState error={error} />);
     
-    expect(screen.getByText('Unable to Load Data')).toBeInTheDocument();
+    expect(screen.getByText('Unable to load data')).toBeInTheDocument();
     expect(screen.getByText('Standard Error')).toBeInTheDocument();
   });
 
@@ -25,7 +25,7 @@ describe('ErrorState', () => {
     
     render(<ErrorState error={error} onRetry={onRetry} />);
     
-    const retryButton = screen.getByRole('button', { name: /retry/i });
+    const retryButton = screen.getByRole('button', { name: /try again/i });
     expect(retryButton).toBeInTheDocument();
     
     fireEvent.click(retryButton);
@@ -36,6 +36,6 @@ describe('ErrorState', () => {
     const error = new Error('Standard Error');
     render(<ErrorState error={error} />);
     
-    expect(screen.queryByRole('button', { name: /retry/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /try again/i })).not.toBeInTheDocument();
   });
 });

@@ -2,7 +2,7 @@ import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '../foundation/Button/Button';
 import { AppError } from '../../api/errors';
 import { cn } from '../../utils/cn';
-import { ERROR_MESSAGES, RECOVERY_ACTIONS } from '../../constants/error-messages';
+import { useTranslation } from 'react-i18next';
 
 interface ErrorStateProps {
   error: Error | AppError | null;
@@ -17,10 +17,12 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ error, onRetry, isRetrying, action, className, title }: ErrorStateProps) {
+  const { t } = useTranslation();
+  
   const errorMessage =
     error instanceof AppError
       ? error.message
-      : error?.message || ERROR_MESSAGES.GENERIC;
+      : error?.message || t('errors.generic');
 
   return (
     <div
@@ -36,7 +38,7 @@ export function ErrorState({ error, onRetry, isRetrying, action, className, titl
       
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-semibold text-text">
-          {title || ERROR_MESSAGES.UNABLE_TO_LOAD}
+          {title || t('errors.unableToLoad')}
         </h3>
         <p className="text-sm text-muted-foreground">{errorMessage}</p>
       </div>
@@ -45,7 +47,7 @@ export function ErrorState({ error, onRetry, isRetrying, action, className, titl
         {onRetry && (
           <Button onClick={onRetry} variant="outline" size="sm" disabled={isRetrying}>
             <RefreshCw className={cn('w-4 h-4 mr-2', isRetrying && 'animate-spin')} />
-            {isRetrying ? RECOVERY_ACTIONS.RETRYING : RECOVERY_ACTIONS.RETRY}
+            {isRetrying ? t('errors.retrying') : t('errors.retry')}
           </Button>
         )}
         {action && (

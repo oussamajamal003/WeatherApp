@@ -1,18 +1,21 @@
 import { Home, Search, Settings, Info } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function Navigation() {
+  const { t } = useTranslation();
+  
   const navItems = [
-    { label: 'Home', icon: Home, path: '/' },
-    { label: 'Search', icon: Search, path: '/search' },
-    { label: 'Settings', icon: Settings, path: '/settings' },
-    { label: 'About', icon: Info, path: '/about' },
+    { label: t('navigation.home'), icon: Home, path: '/' },
+    { label: t('navigation.search'), icon: Search, path: '/search' },
+    { label: t('navigation.settings'), icon: Settings, path: '/settings' },
+    { label: t('navigation.about'), icon: Info, path: '/about' },
   ];
 
   return (
     <>
       {/* Tablet (Nav Rail) & Desktop (Full Sidebar) */}
-      <nav className="hidden md:flex flex-col sticky top-0 h-screen border-r border-border-subtle bg-surface z-40 shrink-0 md:w-[72px] lg:w-[240px] transition-all duration-300 box-content pl-[env(safe-area-inset-left)]">
+      <nav className="hidden md:flex flex-col sticky top-0 h-screen border-r rtl:border-r-0 rtl:border-l border-border-subtle bg-surface z-40 shrink-0 md:w-[72px] lg:w-[240px] transition-all duration-300 box-content pl-[env(safe-area-inset-left)] rtl:pl-0 rtl:pr-[env(safe-area-inset-right)]">
         <div className="flex-1 overflow-y-auto py-12 flex flex-col gap-4 px-6 lg:px-8">
           {navItems.map((item) => (
             <NavLink
@@ -35,7 +38,7 @@ export function Navigation() {
       </nav>
 
       {/* Mobile (Bottom Tab Bar) */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full h-[80px] box-content pb-[env(safe-area-inset-bottom,34px)] bg-surface/80 backdrop-blur-xl border-t border-border-subtle z-50 flex items-center justify-around px-4">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 h-[80px] box-content pb-[env(safe-area-inset-bottom,34px)] bg-surface/80 backdrop-blur-xl border-t border-border-subtle z-50 flex items-center justify-around px-4">
         {navItems.map((item) => (
           <NavLink
             key={item.path}

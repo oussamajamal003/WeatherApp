@@ -1,6 +1,6 @@
 import { FileQuestion } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import { EMPTY_STATE_MESSAGES } from '../../constants/empty-state-messages';
+import { useTranslation } from 'react-i18next';
 
 interface EmptyStateProps {
   title?: string;
@@ -14,12 +14,17 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ 
-  title = EMPTY_STATE_MESSAGES.DEFAULT.TITLE, 
-  message = EMPTY_STATE_MESSAGES.DEFAULT.MESSAGE, 
+  title, 
+  message, 
   className,
   icon,
   action
 }: EmptyStateProps) {
+  const { t } = useTranslation();
+  
+  const displayTitle = title || t('emptyStates.noData');
+  const displayMessage = message || t('emptyStates.noDataDesc');
+
   return (
     <div
       className={cn(
@@ -33,9 +38,9 @@ export function EmptyState({
       
       <div className="flex flex-col gap-2">
         <h3 className="text-lg font-semibold text-text">
-          {title}
+          {displayTitle}
         </h3>
-        <p className="text-sm text-muted-foreground">{message}</p>
+        <p className="text-sm text-muted-foreground">{displayMessage}</p>
       </div>
 
       {action && (

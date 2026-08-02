@@ -1,23 +1,25 @@
 import * as React from 'react';
 import { WifiOff } from 'lucide-react';
+
 import { useOnlineStatus } from '../../hooks/use-online-status';
 import { useToast } from '../../hooks/useToast';
-import { TOAST_MESSAGES } from '../../constants/toast-messages';
 import { cn } from '../../utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export function OfflineBanner({ className }: { className?: string }) {
   const isOnline = useOnlineStatus();
   const { toast } = useToast();
   const wasOffline = React.useRef(false);
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (!isOnline) {
       wasOffline.current = true;
     } else if (wasOffline.current && isOnline) {
-      toast.success(TOAST_MESSAGES.CONNECTION_RESTORED);
+      toast.success(t('toasts.connectionRestored'));
       wasOffline.current = false;
     }
-  }, [isOnline, toast]);
+  }, [isOnline, toast, t]);
 
   return (
     <div
@@ -31,7 +33,7 @@ export function OfflineBanner({ className }: { className?: string }) {
     >
       <WifiOff className="w-5 h-5 shrink-0" aria-hidden={isOnline} />
       <span className="text-sm font-medium">
-        You are currently offline. Displayed data is cached and live updates are temporarily unavailable.
+        {t('emptyStates.offline')}
       </span>
     </div>
   );

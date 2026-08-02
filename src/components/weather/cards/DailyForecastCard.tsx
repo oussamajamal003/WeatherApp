@@ -2,6 +2,8 @@ import * as React from 'react';
 import { WeatherIcon } from '../utilities/WeatherIcon';
 import type { DailyForecastData } from '../../../types/weather';
 import { cn } from '../../../utils/cn';
+import { formatTemperature } from '../../../utils/formatters/weather';
+import { useSettings } from '../../../hooks/use-settings';
 
 export interface DailyForecastCardProps extends React.HTMLAttributes<HTMLDivElement> {
   data: DailyForecastData;
@@ -10,6 +12,7 @@ export interface DailyForecastCardProps extends React.HTMLAttributes<HTMLDivElem
 
 export const DailyForecastCard = React.memo(React.forwardRef<HTMLDivElement, DailyForecastCardProps>(
   ({ data, isToday, className, ...props }, ref) => {
+    const { settings } = useSettings();
     return (
       <div 
         ref={ref}
@@ -31,7 +34,7 @@ export const DailyForecastCard = React.memo(React.forwardRef<HTMLDivElement, Dai
         
         <div className="flex items-center gap-4 flex-1 justify-end">
           <span className="text-body text-subtle w-8 text-right">
-            {Math.round(data.lowTemp)}°
+            {formatTemperature(data.lowTemp, settings.temperatureUnit, false)}
           </span>
           {/* Temperature bar placeholder */}
           <div className="h-1.5 w-24 bg-border rounded-full overflow-hidden relative opacity-50">
@@ -41,7 +44,7 @@ export const DailyForecastCard = React.memo(React.forwardRef<HTMLDivElement, Dai
             />
           </div>
           <span className="text-body font-medium text-foreground w-8 text-right">
-            {Math.round(data.highTemp)}°
+            {formatTemperature(data.highTemp, settings.temperatureUnit, false)}
           </span>
         </div>
       </div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AlertCircle } from 'lucide-react';
 import { Card, CardContent } from '../../foundation/Card/Card';
 import { cn } from '../../../utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export interface ErrorWeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
   error?: string;
@@ -10,7 +11,10 @@ export interface ErrorWeatherCardProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 export const ErrorWeatherCard = React.forwardRef<HTMLDivElement, ErrorWeatherCardProps>(
-  ({ error = 'Failed to load weather data', size = 'md', onRetry, className, ...props }, ref) => {
+  ({ error, size = 'md', onRetry, className, ...props }, ref) => {
+    const { t } = useTranslation();
+    const displayError = error || t('errors.failedLoadWeather');
+
     return (
       <Card
         ref={ref}
@@ -24,13 +28,13 @@ export const ErrorWeatherCard = React.forwardRef<HTMLDivElement, ErrorWeatherCar
       >
         <CardContent className="flex flex-col items-center justify-center h-full gap-4 text-destructive">
           <AlertCircle className="w-10 h-10" />
-          <p className="text-small font-medium">{error}</p>
+          <p className="text-small font-medium">{displayError}</p>
           {onRetry && (
             <button
               onClick={onRetry}
               className="text-caption font-semibold underline underline-offset-2 hover:opacity-80 transition-opacity mt-2"
             >
-              Try Again
+              {t('errors.retry')}
             </button>
           )}
         </CardContent>

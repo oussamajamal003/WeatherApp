@@ -1,21 +1,30 @@
+import { UnitConversion } from '../unit-conversion';
+import type { TemperatureUnit, WindSpeedUnit, PressureUnit } from '../../types/settings';
+
 /**
  * Formats a temperature value.
  * @param value Temperature value
- * @param unit Temperature unit (C, F, or empty)
- * @returns Formatted temperature string, e.g., "24°C"
+ * @param unit Temperature unit
+ * @param includeLabel Whether to include C or F label
+ * @returns Formatted temperature string, e.g., "24°C" or "24°"
  */
-export function formatTemperature(value: number, unit: string = 'C'): string {
-  return `${Math.round(value)}°${unit}`;
+export function formatTemperature(value: number, unit: TemperatureUnit = 'celsius', includeLabel: boolean = true): string {
+  const converted = UnitConversion.convertTemperature(value, unit);
+  const unitLabel = unit === 'fahrenheit' ? 'F' : 'C';
+  return `${Math.round(converted)}°${includeLabel ? unitLabel : ''}`;
 }
-
 /**
  * Formats wind speed.
  * @param speed Wind speed value
- * @param unit Unit, e.g., "m/s" or "mph"
+ * @param unit Unit
  * @returns Formatted wind speed string, e.g., "5.2 m/s"
  */
-export function formatWindSpeed(speed: number, unit: string = 'm/s'): string {
-  return `${speed.toFixed(1)} ${unit}`;
+export function formatWindSpeed(speed: number, unit: WindSpeedUnit = 'ms'): string {
+  const converted = UnitConversion.convertWindSpeed(speed, unit);
+  let unitLabel = 'm/s';
+  if (unit === 'kmh') unitLabel = 'km/h';
+  if (unit === 'mph') unitLabel = 'mph';
+  return `${converted.toFixed(1)} ${unitLabel}`;
 }
 
 /**
@@ -33,10 +42,15 @@ export function formatVisibility(distanceInMeters: number): string {
 /**
  * Formats atmospheric pressure.
  * @param pressure Pressure in hPa
+ * @param unit Unit
  * @returns Formatted pressure string, e.g., "1012 hPa"
  */
-export function formatPressure(pressure: number): string {
-  return `${Math.round(pressure)} hPa`;
+export function formatPressure(pressure: number, unit: PressureUnit = 'hpa'): string {
+  const converted = UnitConversion.convertPressure(pressure, unit);
+  let unitLabel = 'hPa';
+  if (unit === 'mmhg') unitLabel = 'mmHg';
+  if (unit === 'inhg') unitLabel = 'inHg';
+  return `${Math.round(converted)} ${unitLabel}`;
 }
 
 /**
