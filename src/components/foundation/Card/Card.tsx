@@ -23,7 +23,7 @@ const cardVariants = cva(
         hero: 'rounded-2xl', // 24px
       },
       interactive: {
-        true: 'cursor-pointer hover:border-primary/50 aria-selected:border-primary aria-selected:ring-1 aria-selected:ring-primary',
+        true: 'cursor-pointer hover:scale-[1.02] hover:shadow-md active:scale-[0.98] motion-reduce:transform-none hover:border-primary/50 aria-selected:border-primary aria-selected:ring-1 aria-selected:ring-primary',
         false: '',
       },
     },

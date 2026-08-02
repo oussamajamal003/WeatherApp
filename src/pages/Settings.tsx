@@ -8,7 +8,7 @@ export function Settings() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8">
+    <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       <section aria-label="Settings">
         <h1 className="text-h2 font-display mb-8 text-foreground">Settings</h1>
         

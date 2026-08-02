@@ -15,7 +15,7 @@ export const LoadingWeatherCard = React.forwardRef<HTMLDivElement, LoadingWeathe
         ref={ref}
         variant="glass"
         className={cn(
-          'flex flex-col justify-center items-center gap-4 relative',
+          'flex flex-col justify-center items-center gap-4 relative animate-in fade-in duration-500',
           size === 'sm' ? 'min-w-[160px] h-[200px]' : 'min-w-[260px] h-[280px]',
           className
         )}
