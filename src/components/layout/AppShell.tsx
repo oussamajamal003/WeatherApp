@@ -14,7 +14,7 @@ export function AppShell({ children }: AppShellProps) {
     <div className="flex min-h-screen bg-background text-text font-sans antialiased">
       <Navigation />
       
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left,0px)] md:pl-0">
         <div className="sticky top-0 z-50 flex flex-col w-full">
           <OfflineBanner />
           <Header />

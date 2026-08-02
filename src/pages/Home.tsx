@@ -61,10 +61,10 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
         />
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {/* Left Column (Main forecasts) */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-6 md:col-span-1 lg:col-span-2">
           
           {/* Hourly Forecast */}
           <section aria-label="Hourly Forecast">
@@ -102,7 +102,7 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
         </div>
 
         {/* Right Column (Metrics Grid) */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 md:col-span-1 lg:col-span-1">
           <section aria-label="Weather Details" className="grid grid-cols-2 gap-4">
             <Card variant="glass" padding="compact">
               <CardContent className="h-full flex flex-col justify-center">

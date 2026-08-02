@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils/cn';
 
 const cardVariants = cva(
-  'min-w-[240px] text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary aria-disabled:opacity-50 aria-disabled:pointer-events-none',
+  'text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary aria-disabled:opacity-50 aria-disabled:pointer-events-none',
   {
     variants: {
       variant: {

@@ -94,6 +94,9 @@ Support:
 - Tablet
 - Desktop
 
+Minimum supported viewport width: **320px**. 
+Devices narrower than 320px are considered outside the supported design range.
+
 Use Tailwind breakpoints.
 
 ---
