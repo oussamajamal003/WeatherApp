@@ -4,10 +4,18 @@ import { useTheme } from '../hooks/useTheme';
 import { Moon, Sun, Monitor, Thermometer, Bell } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useDocumentTitle } from '../hooks/use-document-title';
+import { useToast } from '../hooks/useToast';
+import { TOAST_MESSAGES } from '../constants/toast-messages';
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
   useDocumentTitle('WeatherApp | Settings');
+
+  const handleSetTheme = (newTheme: 'light' | 'dark' | 'system') => {
+    setTheme(newTheme);
+    toast.success(TOAST_MESSAGES.THEME_CHANGED(newTheme));
+  };
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
@@ -33,7 +41,7 @@ export function Settings() {
                 
                 <div className="flex bg-surface-hover p-1 rounded-lg border border-border/50 w-full sm:w-auto">
                   <button 
-                    onClick={() => setTheme('light')}
+                    onClick={() => handleSetTheme('light')}
                     aria-pressed={theme === 'light'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',
@@ -43,7 +51,7 @@ export function Settings() {
                     <Sun aria-hidden="true" className="w-4 h-4" /> Light
                   </button>
                   <button 
-                    onClick={() => setTheme('dark')}
+                    onClick={() => handleSetTheme('dark')}
                     aria-pressed={theme === 'dark'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',
@@ -53,7 +61,7 @@ export function Settings() {
                     <Moon aria-hidden="true" className="w-4 h-4" /> Dark
                   </button>
                   <button 
-                    onClick={() => setTheme('system')}
+                    onClick={() => handleSetTheme('system')}
                     aria-pressed={theme === 'system'}
                     className={cn(
                       'flex-1 flex items-center justify-center gap-2 px-4 py-2 text-small font-medium rounded-md transition-all',

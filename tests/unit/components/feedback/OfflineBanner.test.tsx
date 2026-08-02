@@ -3,6 +3,17 @@ import { describe, it, expect, vi } from 'vitest';
 import { OfflineBanner } from '../../../../src/components/feedback/OfflineBanner';
 import * as useOnlineStatusModule from '../../../../src/hooks/use-online-status';
 
+vi.mock('../../../../src/hooks/useToast', () => ({
+  useToast: () => ({
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn()
+    }
+  })
+}));
+
 describe('OfflineBanner', () => {
   it('is visually hidden when online', () => {
     vi.spyOn(useOnlineStatusModule, 'useOnlineStatus').mockReturnValue(true);

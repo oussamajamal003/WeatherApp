@@ -1,5 +1,6 @@
 import { isAxiosError } from 'axios';
 import type { APIError as APIErrorType } from '../types/api';
+import { ERROR_MESSAGES } from '../constants/error-messages';
 
 /**
  * Base error class for all application errors.
@@ -40,13 +41,13 @@ export class APIError extends AppError {
 }
 
 export class NetworkError extends AppError {
-  constructor(message = 'Network error occurred. Please check your internet connection.', details?: unknown) {
+  constructor(message = ERROR_MESSAGES.NETWORK, details?: unknown) {
     super(message, 'NETWORK_ERROR', undefined, details);
   }
 }
 
 export class TimeoutError extends AppError {
-  constructor(message = 'The request timed out. Please try again later.', details?: unknown) {
+  constructor(message = ERROR_MESSAGES.TIMEOUT, details?: unknown) {
     super(message, 'TIMEOUT_ERROR', 408, details);
   }
 }
@@ -70,7 +71,7 @@ export class GeolocationError extends AppError {
 }
 
 export class OfflineError extends AppError {
-  constructor(message = 'You are currently offline. Please connect to the internet and try again.', details?: unknown) {
+  constructor(message = ERROR_MESSAGES.OFFLINE, details?: unknown) {
     super(message, 'OFFLINE_ERROR', 0, details);
   }
 }
@@ -104,13 +105,13 @@ export class AuthorizationError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(message = 'The requested resource or location was not found.', details?: unknown) {
+  constructor(message = ERROR_MESSAGES.NOT_FOUND, details?: unknown) {
     super(message, 'NOT_FOUND', 404, details);
   }
 }
 
 export class RateLimitError extends AppError {
-  constructor(message = 'Rate limit exceeded. Please try again later.', details?: unknown) {
+  constructor(message = ERROR_MESSAGES.RATE_LIMIT, details?: unknown) {
     super(message, 'RATE_LIMIT_EXCEEDED', 429, details);
   }
 }
@@ -157,9 +158,9 @@ export function mapApiError(error: unknown): AppError {
       case 403:
         return new AuthorizationError(apiMessage, data);
       case 404:
-        return new NotFoundError(apiMessage, data);
+        return new NotFoundError(undefined, data); // Force default user-friendly message
       case 429:
-        return new RateLimitError(apiMessage, data);
+        return new RateLimitError(undefined, data); // Force default user-friendly message
       default:
         if (status >= 500) {
           return new ServerError(apiMessage, status, data);
@@ -172,6 +173,6 @@ export function mapApiError(error: unknown): AppError {
   }
 
   // Handle generic non-axios errors
-  const genericMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+  const genericMessage = error instanceof Error ? error.message : ERROR_MESSAGES.GENERIC;
   return new AppError(genericMessage, 'UNKNOWN_ERROR', undefined, error);
 }
