@@ -26,7 +26,7 @@ test.describe('Geolocation Journey', () => {
     await expect(page.getByText(/London|Your Location/i).first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('handles geolocation denied', async ({ page, context }) => {
+  test('handles geolocation denied', async ({ page }) => {
     // Force geolocation to return PERMISSION_DENIED immediately
     await page.addInitScript(() => {
       navigator.geolocation.getCurrentPosition = (success, error) => {
