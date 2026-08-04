@@ -30,7 +30,7 @@ export interface WeatherData {
   moonPhase: string;
   description: string;
   locationName: string;
-  updatedAt: string;
+  weatherUpdatedAt: string;
 }
 
 export interface HourlyForecastData {

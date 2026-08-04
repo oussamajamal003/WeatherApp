@@ -6,7 +6,38 @@ import { ToggleFavoriteButton } from '../buttons/ToggleFavoriteButton';
 import { useCurrentWeather } from '../../../api/hooks/use-current-weather';
 import type { FavoriteLocation } from '../../../types/favorites';
 import { cn } from '../../../utils/cn';
-import { Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { formatRelativeTime } from '../../../utils/date-format';
+
+import { Skeleton } from '../../foundation/Skeleton/Skeleton';
+
+export const FavoriteCardSkeleton = React.memo(() => (
+  <Card variant="elevated" padding="standard" radius="standard" className="flex flex-col justify-between min-w-[240px] w-full relative">
+    <CardContent className="flex flex-col h-full gap-4">
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col gap-2 flex-1 pr-4 mt-1">
+          <Skeleton className="h-5 w-32" />
+          <Skeleton className="h-3 w-20" />
+        </div>
+      </div>
+      <div className="flex flex-col mt-auto pt-2 gap-3">
+        <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+          <div className="flex items-center justify-center mb-1">
+            <Skeleton className="h-8 w-8 rounded-full" />
+          </div>
+        </div>
+        <div className="w-full pt-3 pb-1 mt-1 border-t border-border/50">
+          <Skeleton className="h-3 w-32" />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+));
+FavoriteCardSkeleton.displayName = 'FavoriteCardSkeleton';
 
 export interface FavoriteCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   favorite: FavoriteLocation;
@@ -15,6 +46,7 @@ export interface FavoriteCardProps extends Omit<React.HTMLAttributes<HTMLDivElem
 
 export const FavoriteCard = React.memo(React.forwardRef<HTMLDivElement, FavoriteCardProps>(
   ({ favorite, onSelect, className, ...props }, ref) => {
+    const { t, i18n } = useTranslation();
     
     // Automatically fetch and maintain fresh weather data for this favorite!
     const { data: weather, isLoading, isError } = useCurrentWeather({
@@ -60,30 +92,45 @@ export const FavoriteCard = React.memo(React.forwardRef<HTMLDivElement, Favorite
           
           <div className="flex flex-col mt-auto pt-2">
             {isLoading ? (
-              <div className="flex items-center justify-center py-4">
-                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              <div className="flex flex-col animate-in fade-in duration-500 gap-3">
+                <div className="flex items-end justify-between">
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-8 w-16" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                  <div className="flex items-center justify-center mb-1">
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                  </div>
+                </div>
+                <div className="w-full pt-3 pb-1 mt-1 border-t border-border/50">
+                  <Skeleton className="h-3 w-32" />
+                </div>
               </div>
             ) : isError || !weather ? (
               <div className="text-caption text-destructive py-2">
                 Failed to load weather
               </div>
             ) : (
-              <div className="flex items-end justify-between">
-                <div className="flex flex-col">
-                  <Temperature 
-                    value={weather.temperature} 
-                    size="md" 
-                    className="text-h3 font-display" 
-                    label="" 
-                  />
-                  <span className="text-caption text-foreground capitalize mt-1">
-                    {weather.description}
-                  </span>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-row items-end justify-between">
+                  <div className="flex flex-col">
+                    <Temperature 
+                      value={weather.temperature} 
+                      size="md" 
+                      className="text-h3 font-display" 
+                      label="" 
+                    />
+                    <span className="text-caption text-foreground capitalize mt-1">
+                      {weather.description}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center mb-1">
+                    <WeatherIcon condition={weather.condition} size="md" />
+                  </div>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <WeatherIcon condition={weather.condition} size="md" />
-                  <span className="text-[10px] text-subtle">
-                    Updated {weather.updatedAt}
+                <div className="w-full pt-3 pb-1 mt-1 border-t border-border/50">
+                  <span className="text-[10px] leading-relaxed text-subtle block">
+                    {t('common.addedToFavorites')} {formatRelativeTime(new Date(favorite.favoritedAt).toISOString(), i18n.language)}
                   </span>
                 </div>
               </div>

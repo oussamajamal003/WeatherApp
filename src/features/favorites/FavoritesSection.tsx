@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useFavorites } from '../../hooks/use-favorites';
-import { FavoriteCard } from '../../components/weather/cards/FavoriteCard';
+import { FavoriteCard, FavoriteCardSkeleton } from '../../components/weather/cards/FavoriteCard';
 import { EmptyState } from '../../components/feedback/EmptyState';
 import { useNavigate } from 'react-router-dom';
 import type { FavoriteLocation } from '../../types/favorites';
@@ -9,11 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 interface FavoritesSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelectFavorite?: (favorite: FavoriteLocation) => void;
+  onSearchClick?: () => void;
   title?: string;
 }
 
 export function FavoritesSection({ 
   onSelectFavorite, 
+  onSearchClick,
   title,
   className,
   ...props 
@@ -29,7 +31,13 @@ export function FavoritesSection({
         message={t('emptyStates.addFavoritesDesc')}
         action={{
           label: t('emptyStates.searchLocations'),
-          onClick: () => navigate('/search')
+          onClick: () => {
+            if (onSearchClick) {
+              onSearchClick();
+            } else {
+              navigate('/search');
+            }
+          }
         }}
       />
     );
@@ -48,7 +56,10 @@ export function FavoritesSection({
       </h2>
       
       {isLoading ? (
-        <div className="text-body text-muted-foreground">{t('common.loading')}</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FavoriteCardSkeleton />
+          <FavoriteCardSkeleton />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {favorites.map((fav) => (

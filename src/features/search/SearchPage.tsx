@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { SearchBar, LocationBadge, WeatherCard, ToggleFavoriteButton } from '../../components/weather';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { LocationBadge, WeatherCard, ToggleFavoriteButton } from '../../components/weather';
+import { LoadingWeatherCard } from '../../components/weather/status/LoadingWeatherCard';
+import { SearchBar } from '../../components/weather/search/SearchBar';
 import { SearchDropdown } from './components/SearchDropdown';
 import { useDebounce } from './hooks/useDebounce';
 import { useSearchHistory } from './hooks/useSearchHistory';
@@ -20,10 +22,20 @@ export function SearchPage() {
   const { t } = useTranslation();
   useDocumentTitle(`WeatherApp | ${t('navigation.search')}`);
   const navigate = useNavigate();
-  const [query, setQuery] = React.useState('');
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialQuery = searchParams.get('q') || '';
+  
+  const [query, setQuery] = React.useState(initialQuery);
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(!!initialQuery);
   const [focusedIndex, setFocusedIndex] = React.useState(-1);
   const [selectedLocation, setSelectedLocation] = React.useState<Location | null>(null);
+
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    // Auto-focus the input when SearchPage mounts
+    inputRef.current?.focus();
+  }, [initialQuery]);
 
   const debouncedQuery = useDebounce(query, SEARCH_CONSTANTS.DEBOUNCE_MS);
   const { history, addSearch, clearHistory } = useSearchHistory();
@@ -49,7 +61,11 @@ export function SearchPage() {
     if (value.trim().length === 0) {
       setSelectedLocation(null);
     }
-  }, []);
+    if (searchParams.has('q')) {
+      searchParams.delete('q');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleSelectLocation = React.useCallback((location: Location) => {
     setQuery(location.name);
@@ -83,20 +99,25 @@ export function SearchPage() {
     setQuery('');
     setSelectedLocation(null);
     setIsDropdownOpen(false);
-  }, []);
+    if (searchParams.has('q')) {
+      searchParams.delete('q');
+      setSearchParams(searchParams, { replace: true });
+    }
+    inputRef.current?.focus();
+  }, [searchParams, setSearchParams]);
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-3xl mx-auto p-4 md:p-8 animate-in fade-in duration-500">
       <section aria-label={t('emptyStates.searchLocations')} className="relative">
         <h1 className="text-h2 font-display mb-6 text-foreground">{t('emptyStates.searchLocations')}</h1>
         <SearchBar
+          ref={inputRef}
           value={query}
           onChange={handleInputChange}
           onClear={handleClear}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsDropdownOpen(true)}
           onBlur={() => {
-            // Delay closing to allow clicks on dropdown items
             setTimeout(() => setIsDropdownOpen(false), 200);
           }}
           placeholder={t('search.placeholder')}
@@ -123,6 +144,7 @@ export function SearchPage() {
             handleSelectLocation(location);
             navigate('/');
           }} 
+          onSearchClick={() => inputRef.current?.focus()}
           className="mb-8" 
         />
       )}
@@ -183,9 +205,7 @@ export function SearchPage() {
           </div>
           <div className="flex flex-col gap-4" aria-live="polite" aria-busy={isWeatherLoading}>
             {isWeatherLoading && (
-              <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
-                {t('common.loading')}
-              </div>
+              <LoadingWeatherCard size="md" />
             )}
             {isWeatherError && !weatherData && (
               <ErrorState 
@@ -199,7 +219,7 @@ export function SearchPage() {
               />
             )}
             {weatherData && (
-              <WeatherCard data={weatherData} size="md" variant="solid" />
+              <WeatherCard data={weatherData} size="md" variant="glass" />
             )}
           </div>
         </section>

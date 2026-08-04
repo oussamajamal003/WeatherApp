@@ -51,6 +51,6 @@ export function mapWeatherResponse(
     moonPhase: 'Unknown', // OpenWeather free tier doesn't provide moon phase
     description: data.weather[0]?.description || 'clear',
     locationName: data.name,
-    updatedAt: new Date(data.dt * 1000).toISOString(),
+    weatherUpdatedAt: new Date(data.dt * 1000).toISOString(),
   };
 }

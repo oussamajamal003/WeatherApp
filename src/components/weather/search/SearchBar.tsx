@@ -7,19 +7,21 @@ export interface SearchBarProps extends Omit<React.InputHTMLAttributes<HTMLInput
   value: string;
   onChange: (value: string) => void;
   onClear?: () => void;
+  iconClassName?: string;
 }
 
 export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
-  ({ value, onChange, onClear, className, ...props }, ref) => {
+  ({ value, onChange, onClear, className, iconClassName, ...props }, ref) => {
     return (
-      <div className={cn('relative w-full', className)}>
+      <div className="relative w-full">
         <Input
           ref={ref}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           icon={<Search className="w-5 h-5 text-muted-foreground" />}
-          className="pr-12" // Make room for the clear button
+          className={cn("pr-12", className)} // Make room for the clear button
+          iconClassName={iconClassName}
           {...props}
         />
         {value && onClear && (

@@ -70,7 +70,7 @@ export function useToggleFavorite() {
       
       const nextFavorites = isFav
         ? previousFavorites.filter(f => f.id !== id)
-        : [{ ...location, id, addedAt: Date.now() }, ...previousFavorites];
+        : [{ ...location, id, favoritedAt: Date.now() }, ...previousFavorites];
         
       queryClient.setQueryData(FAVORITES_QUERY_KEY, nextFavorites);
       

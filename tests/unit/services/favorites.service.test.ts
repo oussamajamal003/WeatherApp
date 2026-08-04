@@ -31,7 +31,7 @@ describe('FavoritesService', () => {
     expect(favorites).toHaveLength(1);
     expect(favorites[0].name).toBe('London');
     expect(favorites[0].id).toBe('51.5074--0.1278');
-    expect(favorites[0].addedAt).toBeDefined();
+    expect(favorites[0].favoritedAt).toBeDefined();
     
     // Verify persistence
     expect(storage.get(FAVORITES_STORAGE_KEY)).toEqual(favorites);

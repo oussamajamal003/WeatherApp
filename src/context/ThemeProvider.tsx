@@ -2,18 +2,15 @@ import React, { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { ThemeContext } from "./ThemeContext";
 import type { Theme } from "./ThemeContext";
+import { useSettings } from "../hooks/use-settings";
 
 interface ThemeProviderProps {
   children: ReactNode;
 }
 
-const THEME_STORAGE_KEY = "weather-theme";
-
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY) as Theme;
-    return storedTheme || "system";
-  });
+  const { settings, updateSettings } = useSettings();
+  const theme = (settings.theme as Theme) || 'system';
 
   const [isDark, setIsDark] = useState<boolean>(false);
 
@@ -46,8 +43,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+    updateSettings({ theme: newTheme });
   };
 
   return (

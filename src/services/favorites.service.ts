@@ -36,7 +36,7 @@ export class FavoritesService {
     const newFavorite: FavoriteLocation = {
       ...location,
       id,
-      addedAt: Date.now(),
+      favoritedAt: Date.now(),
     };
 
     // Add to the beginning of the list

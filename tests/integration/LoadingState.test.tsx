@@ -114,7 +114,7 @@ describe('Loading States Integration', () => {
         airQuality: 1,
         sunrise: new Date().toISOString(),
         sunset: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        weatherUpdatedAt: new Date().toISOString()
       });
       
       resolveForecast({

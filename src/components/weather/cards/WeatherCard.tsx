@@ -6,7 +6,8 @@ import type { WeatherData } from '../../../types/weather';
 import { cn } from '../../../utils/cn';
 import { LoadingWeatherCard } from '../status/LoadingWeatherCard';
 import { ErrorWeatherCard } from '../status/ErrorWeatherCard';
-import { formatDate, formatTemperature } from '../../../utils/formatters/weather';
+import { formatTemperature } from '../../../utils/formatters/weather';
+import { formatRelativeTime } from '../../../utils/date-format';
 import { useSettings } from '../../../hooks/use-settings';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +25,7 @@ export interface WeatherCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCardProps>(
   ({ data, isLoading, error, size = 'md', variant = 'glass', selected = false, theme, elevation = 2, className, ...props }, ref) => {
     const { settings } = useSettings();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     // Map size to padding/radius
     const paddingMap = {
@@ -78,7 +79,7 @@ export const WeatherCard = React.memo(React.forwardRef<HTMLDivElement, WeatherCa
             <div className="flex flex-col gap-1">
               <span className="text-small font-medium text-foreground">{data.locationName}</span>
               {size !== 'sm' && (
-                <span className="text-caption text-subtle">{t('common.updatedAt')} {formatDate(data.updatedAt)}</span>
+                <span className="text-caption text-subtle">{t('common.weatherUpdatedAt')} {formatRelativeTime(data.weatherUpdatedAt, i18n.language)}</span>
               )}
             </div>
             <WeatherIcon condition={data.condition} size={size === 'sm' ? 'sm' : 'md'} />

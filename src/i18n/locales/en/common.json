@@ -10,6 +10,8 @@
     "success": "Success",
     "today": "Today",
     "updatedAt": "Updated",
+    "weatherUpdatedAt": "Weather updated",
+    "addedToFavorites": "Added to Favorites",
     "or": "or",
     "enable": "Enable",
     "skipToMainContent": "Skip to main content",

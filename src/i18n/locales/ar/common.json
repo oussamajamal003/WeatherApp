@@ -10,6 +10,8 @@
     "success": "نجاح",
     "today": "اليوم",
     "updatedAt": "محدث",
+    "weatherUpdatedAt": "تم تحديث الطقس",
+    "addedToFavorites": "أضيفت للمفضلة",
     "or": "أو",
     "enable": "تفعيل",
     "skipToMainContent": "تخطي إلى المحتوى الرئيسي",

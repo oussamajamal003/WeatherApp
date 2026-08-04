@@ -62,7 +62,7 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
           
           {/* Hourly Forecast */}
           <section aria-label={t('weather.hourlyForecast')}>
-            <ForecastCard title={t('weather.hourlyForecast')} isLoading={isForecastLoading} error={forecastError}>
+            <ForecastCard title={t('weather.hourlyForecast')} type="hourly" isLoading={isForecastLoading} error={forecastError}>
               {forecast?.hourly && forecast.hourly.length > 0 && (
                 <div className="flex overflow-x-auto pb-2 gap-6 scrollbar-hide snap-x">
                   {forecast.hourly.map((hour, index) => (
@@ -77,7 +77,7 @@ function WeatherDashboard({ coordinates }: { coordinates: Coordinates }) {
           
           {/* Daily Forecast */}
           <section aria-label={t('weather.dailyForecast')}>
-            <ForecastCard title={t('weather.dailyForecast')} isLoading={isForecastLoading} error={forecastError}>
+            <ForecastCard title={t('weather.dailyForecast')} type="daily" isLoading={isForecastLoading} error={forecastError}>
               {forecast?.daily && forecast.daily.length > 0 && (
                 <div className="flex flex-col gap-2">
                   {forecast.daily.map((day, index) => (

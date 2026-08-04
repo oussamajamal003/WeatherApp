@@ -3,15 +3,18 @@ import { cn } from '../../../utils/cn';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;
+  iconClassName?: string;
   isInvalid?: boolean;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, isInvalid, ...props }, ref) => {
+  ({ className, type, icon, iconClassName, isInvalid, ...props }, ref) => {
     return (
       <div className="relative inline-block w-full">
         {icon && (
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-subtle pointer-events-none flex items-center justify-center w-8 h-8">
+          <div className={cn("absolute top-1/2 -translate-y-1/2 text-subtle pointer-events-none flex items-center justify-center", 
+            iconClassName || "left-6 w-8 h-8"
+          )}>
             {icon}
           </div>
         )}
