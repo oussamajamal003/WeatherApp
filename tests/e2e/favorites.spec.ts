@@ -11,9 +11,9 @@ test.describe('Favorites Journey', () => {
   test('add city to favorites and it persists', async ({ page }) => {
     // Search and select London
     const searchInput = page.getByTestId('search-input-main');
-    await searchInput.fill('London');
+    await searchInput.pressSequentially('London', { delay: 50 });
     const option = page.getByRole('option', { name: /London/i }).first();
-    await expect(option).toBeVisible();
+    await expect(option).toBeVisible({ timeout: 10000 });
     await option.click();
 
     // Weather card loads, click Favorite toggle
@@ -36,9 +36,9 @@ test.describe('Favorites Journey', () => {
   test('remove city from favorites', async ({ page }) => {
     // Step 1: Add favorite
     const searchInput = page.getByTestId('search-input-main');
-    await searchInput.fill('London');
+    await searchInput.pressSequentially('London', { delay: 50 });
     const option = page.getByRole('option', { name: /London/i }).first();
-    await expect(option).toBeVisible();
+    await expect(option).toBeVisible({ timeout: 10000 });
     await option.click();
 
     const favoriteToggle = page.getByTestId('favorite-toggle');

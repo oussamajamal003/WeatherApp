@@ -29,17 +29,38 @@ test.describe('Geolocation Journey', () => {
   test('handles geolocation denied', async ({ page }) => {
     // Force geolocation to return PERMISSION_DENIED immediately
     await page.addInitScript(() => {
-      navigator.geolocation.getCurrentPosition = (success, error) => {
-        if (error) {
-          error({
-            code: 1, // PERMISSION_DENIED
-            message: 'User denied geolocation',
-            PERMISSION_DENIED: 1,
-            POSITION_UNAVAILABLE: 2,
-            TIMEOUT: 3
-          } as GeolocationPositionError);
-        }
+      const mockGeolocation = {
+        getCurrentPosition: (success: unknown, error: (err: GeolocationPositionError) => void) => {
+          if (error) {
+            error({
+              code: 1, // PERMISSION_DENIED
+              message: 'User denied geolocation',
+              PERMISSION_DENIED: 1,
+              POSITION_UNAVAILABLE: 2,
+              TIMEOUT: 3
+            } as GeolocationPositionError);
+          }
+        },
+        watchPosition: () => {},
+        clearWatch: () => {}
       };
+
+      Object.defineProperty(navigator, 'geolocation', {
+        value: mockGeolocation,
+        configurable: true,
+        writable: true
+      });
+
+      // Also mock permissions API for browsers that rely on checkPermission()
+      if (navigator.permissions && navigator.permissions.query) {
+        const originalQuery = navigator.permissions.query;
+        navigator.permissions.query = async (params: PermissionDescriptor) => {
+          if (params.name === 'geolocation') {
+            return { state: 'denied', onchange: null } as unknown as PermissionStatus;
+          }
+          return originalQuery.call(navigator.permissions, params);
+        };
+      }
     });
 
     await page.goto('/');

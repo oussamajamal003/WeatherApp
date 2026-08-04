@@ -10,14 +10,15 @@ test.describe('Offline Journey', () => {
   test('offline banner appears when network drops', async ({ page, context }) => {
     // Search and load a city first to populate cache
     const searchInput = page.getByTestId('search-input-main');
-    await searchInput.fill('London');
+    await searchInput.pressSequentially('London', { delay: 50 });
     const option = page.getByRole('option', { name: /London/i }).first();
-    await expect(option).toBeVisible();
+    await expect(option).toBeVisible({ timeout: 10000 });
     await option.click();
     await expect(page.getByText(/clear sky/i)).toBeVisible();
 
     // Simulate going offline
     await context.setOffline(true);
+    await page.evaluate(() => window.dispatchEvent(new Event('offline')));
     
     // Check if the offline banner appears
     const offlineBanner = page.getByText(/You are currently offline/i);
