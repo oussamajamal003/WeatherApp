@@ -49,6 +49,7 @@ export function ToggleFavoriteButton({
       aria-label={isFavorite ? t('favorites.removeName', { name: location.name }) : t('favorites.addName', { name: location.name })}
       aria-pressed={isFavorite}
       title={isFavorite ? t('favorites.remove') : t('favorites.add')}
+      data-testid="favorite-toggle"
       {...props}
     >
       <Star className={cn(isFavorite && 'fill-current')} />

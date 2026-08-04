@@ -38,6 +38,7 @@ export const HeaderSearch = React.memo(function HeaderSearch() {
       placeholder={t('search.placeholder')}
       className="h-11 py-0 pl-12 rounded-full text-body bg-surface/50 border-border shadow-none"
       iconClassName="left-4 w-5 h-5"
+      data-testid="header-search-input"
     />
   );
 });
