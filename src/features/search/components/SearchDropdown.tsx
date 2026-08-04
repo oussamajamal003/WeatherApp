@@ -40,6 +40,7 @@ export const SearchDropdown = React.memo(function SearchDropdown({
       )}
       role="listbox"
       id="search-suggestions"
+      data-testid="search-suggestion-list"
     >
       {isLoading && (
         <div className="flex items-center justify-center py-6 text-muted-foreground">

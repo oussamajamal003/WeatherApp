@@ -125,6 +125,7 @@ export function SearchPage() {
           aria-expanded={isDropdownOpen}
           aria-controls="search-suggestions"
           aria-activedescendant={focusedIndex >= 0 ? `suggestion-${focusedIndex}` : undefined}
+          data-testid="search-input-main"
         />
         <SearchDropdown
           query={debouncedQuery}
