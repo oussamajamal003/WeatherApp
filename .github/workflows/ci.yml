@@ -16,6 +16,10 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      VITE_OPENWEATHER_API_KEY: dummy_key_for_ci
+      VITE_OPENWEATHER_BASE_URL: https://api.openweathermap.org/data/2.5
+      VITE_OPENWEATHER_GEO_URL: http://api.openweathermap.org/geo/1.0
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
