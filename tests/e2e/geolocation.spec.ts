@@ -18,7 +18,7 @@ test.describe('Geolocation Journey', () => {
     const useLocationBtn = page.getByRole('button', { name: /Use My Location/i });
     try {
       await useLocationBtn.click({ timeout: 2000 });
-    } catch (e) {
+    } catch {
       // Ignore if unmounted
     }
 
@@ -40,7 +40,7 @@ test.describe('Geolocation Journey', () => {
     const useLocationBtn = page.getByRole('button', { name: /Use My Location/i });
     try {
       await useLocationBtn.click({ timeout: 5000 });
-    } catch (e) {
+    } catch {
       // Ignore "element detached from the DOM" which occurs when the prompt denies immediately
       // and unmounts the Welcome component mid-click.
     }
