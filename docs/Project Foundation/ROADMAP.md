@@ -13,9 +13,9 @@ Each milestone should be completed, tested, documented, and merged into the `dev
 | Phase | Status |
 |--------|--------|
 | Planning | ✅ Complete |
-| Design | 🟡 In Progress |
-| Development | ⏳ Pending |
-| Testing | ⏳ Pending |
+| Design | ✅ Complete |
+| Development | ✅ Complete |
+| Testing | ✅ Complete |
 | Deployment | ⏳ Pending |
 
 ---
