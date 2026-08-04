@@ -34,19 +34,19 @@ export class AppError extends Error {
 /**
  * Specific error classes for different failure modes.
  */
-export class APIError extends AppError {
+class APIError extends AppError {
   constructor(message: string, statusCode?: number, details?: unknown) {
     super(message, 'API_ERROR', statusCode, details);
   }
 }
 
-export class NetworkError extends AppError {
+class NetworkError extends AppError {
   constructor(message = i18n.t('errors.networkError', 'Unable to connect. Please check your internet connection and try again.'), details?: unknown) {
     super(message, 'NETWORK_ERROR', undefined, details);
   }
 }
 
-export class TimeoutError extends AppError {
+class TimeoutError extends AppError {
   constructor(message = 'The request took too long. Please try again later.', details?: unknown) {
     super(message, 'TIMEOUT_ERROR', 408, details);
   }
@@ -70,13 +70,13 @@ export class GeolocationError extends AppError {
   }
 }
 
-export class OfflineError extends AppError {
+class OfflineError extends AppError {
   constructor(message = i18n.t('emptyStates.offline', 'You are currently offline. Displayed data is cached and live updates are temporarily unavailable.'), details?: unknown) {
     super(message, 'OFFLINE_ERROR', 0, details);
   }
 }
 
-export class ClientError extends AppError {
+class ClientError extends AppError {
   constructor(message = 'A client-side error occurred.', statusCode = 400, details?: unknown) {
     super(message, 'CLIENT_ERROR', statusCode, details);
   }
@@ -92,31 +92,31 @@ export class FeatureUnavailableError extends AppError {
   }
 }
 
-export class AuthenticationError extends AppError {
+class AuthenticationError extends AppError {
   constructor(message = 'Invalid API key or unauthorized access.', details?: unknown) {
     super(message, 'AUTHENTICATION_ERROR', 401, details);
   }
 }
 
-export class AuthorizationError extends AppError {
+class AuthorizationError extends AppError {
   constructor(message = 'Access forbidden. You do not have permission for this resource.', details?: unknown) {
     super(message, 'AUTHORIZATION_ERROR', 403, details);
   }
 }
 
-export class NotFoundError extends AppError {
+class NotFoundError extends AppError {
   constructor(message = 'City not found. Try searching for another city.', details?: unknown) {
     super(message, 'NOT_FOUND', 404, details);
   }
 }
 
-export class RateLimitError extends AppError {
+class RateLimitError extends AppError {
   constructor(message = 'Rate limit exceeded. Please try again later.', details?: unknown) {
     super(message, 'RATE_LIMIT_EXCEEDED', 429, details);
   }
 }
 
-export class ServerError extends AppError {
+class ServerError extends AppError {
   constructor(message = 'An internal server error occurred.', statusCode = 500, details?: unknown) {
     super(message, 'SERVER_ERROR', statusCode, details);
   }

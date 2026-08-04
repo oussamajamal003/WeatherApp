@@ -10,10 +10,3 @@ export function useDirectGeocoding(query: string, limit?: number, options?: { en
   });
 }
 
-export function useReverseGeocoding(lat: number, lon: number, limit?: number, options?: { enabled?: boolean }) {
-  return useQuery({
-    queryKey: QUERY_KEYS.reverseGeocode(lat, lon),
-    queryFn: () => GeocodingService.getLocationNameByCoordinates(lat, lon, limit),
-    enabled: options?.enabled ?? true,
-  });
-}

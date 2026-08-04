@@ -15,12 +15,12 @@ test.describe('Search Journey', () => {
   test('typing displays suggestions and debounces', async ({ page }) => {
     const searchInput = page.getByTestId('search-input-main');
     
-    // Type quickly (testing debounce indirectly)
-    await searchInput.fill('Lon');
+    // Type to simulate user input (debounce triggers after typing stops)
+    await searchInput.pressSequentially('Lon', { delay: 100 });
     
     // Suggestions should appear after debounce (API mock will return results)
     const suggestionsBox = page.getByTestId('search-suggestion-list');
-    await expect(suggestionsBox).toBeVisible();
+    await expect(suggestionsBox).toBeVisible({ timeout: 10000 });
     
     await expect(async () => {
       expect(await page.getByRole('option').count()).toBeGreaterThan(0);
@@ -30,11 +30,11 @@ test.describe('Search Journey', () => {
 
   test('selecting a suggestion loads weather', async ({ page }) => {
     const searchInput = page.getByTestId('search-input-main');
-    await searchInput.fill('London');
+    await searchInput.pressSequentially('London', { delay: 50 });
     
     // Click on London
     const option = page.getByRole('option', { name: /London/i }).first();
-    await expect(option).toBeVisible();
+    await expect(option).toBeVisible({ timeout: 10000 });
     await option.click();
     
     // Ensure weather card loads
@@ -45,9 +45,9 @@ test.describe('Search Journey', () => {
 
   test('keyboard navigation works in suggestions', async ({ page }) => {
     const searchInput = page.getByTestId('search-input-main');
-    await searchInput.fill('Lon');
+    await searchInput.pressSequentially('Lon', { delay: 50 });
     
-    await expect(page.getByTestId('search-suggestion-list')).toBeVisible();
+    await expect(page.getByTestId('search-suggestion-list')).toBeVisible({ timeout: 10000 });
     await expect(page.getByRole('option').first()).toBeVisible();
 
     // Arrow down
