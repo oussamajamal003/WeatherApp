@@ -27,22 +27,28 @@ test.describe('Geolocation Journey', () => {
   });
 
   test('handles geolocation denied', async ({ page, context }) => {
-    // Clear permissions to explicitly simulate denial
-    await context.clearPermissions();
-    // Denying geolocation (Playwright does not easily block, but if we don't grant, it prompts or blocks)
-    // Actually, context.grantPermissions with empty array blocks it if requested?
-    // Let's test the manual search fallback directly
-    
+    // Force geolocation to return PERMISSION_DENIED immediately
+    await page.addInitScript(() => {
+      navigator.geolocation.getCurrentPosition = (success, error) => {
+        if (error) {
+          error({
+            code: 1, // PERMISSION_DENIED
+            message: 'User denied geolocation',
+            PERMISSION_DENIED: 1,
+            POSITION_UNAVAILABLE: 2,
+            TIMEOUT: 3
+          } as GeolocationPositionError);
+        }
+      };
+    });
+
     await page.goto('/');
     
-    // Playwright clearPermissions defaults to 'prompt', so we must click the button
-    // to trigger the prompt which immediately denies.
     const useLocationBtn = page.getByRole('button', { name: /Use My Location/i });
     try {
       await useLocationBtn.click({ timeout: 5000 });
     } catch {
-      // Ignore "element detached from the DOM" which occurs when the prompt denies immediately
-      // and unmounts the Welcome component mid-click.
+      // Ignore if unmounted
     }
     
     // Wait for the fallback search page to appear
